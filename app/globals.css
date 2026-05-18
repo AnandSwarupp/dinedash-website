@@ -1,0 +1,183 @@
+@import "tailwindcss";
+
+/* Enable class-based dark mode for Tailwind v4 */
+@variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-background: #FFFBF5;
+  --color-foreground: #1C1917;
+
+  --color-brand-orange: #16A34A;
+  --color-brand-orange-dark: #15803D;
+  --color-brand-orange-light: #BBF7D0;
+  --color-brand-green: #16A34A;
+  --color-brand-green-dark: #15803D;
+  --color-brand-green-light: #BBF7D0;
+  --color-brand-amber: #F59E0B;
+  --color-brand-cream: #FFFBF5;
+  --color-brand-cream-dark: #FEF3C7;
+  --color-brand-dark: #1C1917;
+  --color-brand-dark-secondary: #292524;
+  --color-brand-muted: #78716C;
+  --color-brand-border: #E7E5E4;
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Light mode tokens ── */
+:root {
+  --page-bg: #FFFBF5;
+  --surface: #FFFFFF;
+  --surface-alt: #FFFBF5;
+  --surface-dark: #1C1917;
+  --text-primary: #1C1917;
+  --text-secondary: #78716C;
+  --text-muted: #A8A29E;
+  --border: #E7E5E4;
+  --brand: #16A34A;
+  --brand-hover: #15803D;
+  --brand-light: #DCFCE7;
+  --brand-text: #15803D;
+  --navbar-bg: rgba(255,251,245,0.95);
+  --card-shadow: 0 4px 24px rgba(0,0,0,0.06);
+}
+
+/* ── Dark mode tokens (matches your app) ── */
+.dark {
+  --page-bg: #0F1623;
+  --surface: #1A2035;
+  --surface-alt: #151C2C;
+  --surface-dark: #0A0F1A;
+  --text-primary: #F1F5F9;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --border: #252D3D;
+  --brand: #4ADE80;
+  --brand-hover: #22C55E;
+  --brand-light: rgba(74,222,128,0.15);
+  --brand-text: #4ADE80;
+  --navbar-bg: rgba(15,22,35,0.95);
+  --card-shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+body {
+  background: var(--page-bg);
+  color: var(--text-primary);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--surface-alt); }
+::-webkit-scrollbar-thumb { background: var(--brand); border-radius: 3px; }
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, #16A34A 0%, #15803D 50%, #22C55E 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-green {
+  background: linear-gradient(135deg, #16A34A 0%, #15803D 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Section padding */
+.section-padding {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+}
+
+
+/* Form input */
+.input-field {
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  padding: 0.625rem 1rem;
+  color: var(--text-primary);
+  background: var(--surface-alt);
+  outline: none;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.input-field::placeholder {
+  color: var(--text-muted);
+}
+.input-field:focus {
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--brand) 30%, transparent);
+  border-color: var(--brand);
+}
+
+/* Green button — auto-adapts to dark/light */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--brand);
+  color: #0F1623;
+  font-weight: 700;
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  transition: background 0.2s, transform 0.15s;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+}
+.btn-primary:hover {
+  background: var(--brand-hover);
+  transform: translateY(-1px);
+}
+
+/* Outline button */
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  color: var(--brand);
+  font-weight: 600;
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  border: 2px solid var(--brand);
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn-outline:hover {
+  background: var(--brand);
+  color: #0F1623;
+  transform: translateY(-1px);
+}
+
+/* Card hover */
+.card-hover {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow);
+}
