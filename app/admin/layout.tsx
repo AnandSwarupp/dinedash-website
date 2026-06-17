@@ -5,7 +5,8 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import {
   Zap, LayoutDashboard, Users, Mail, Tag, Timer,
-  HelpCircle, Star, UserCheck, Settings, LogOut, Menu, X, ChevronDown
+  HelpCircle, Star, UserCheck, Settings, LogOut, Menu, X, ChevronDown,
+  Newspaper, ShieldCheck
 } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -13,6 +14,7 @@ const navItems = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Leads", href: "/admin/leads", icon: Users },
   { label: "Contacts", href: "/admin/contacts", icon: Mail },
+  { label: "Blog", href: "/admin/blogs", icon: Newspaper },
   {
     label: "Content", icon: Tag, children: [
       { label: "Pricing Plans", href: "/admin/content/pricing", icon: Tag },
@@ -23,6 +25,13 @@ const navItems = [
       { label: "Site Settings", href: "/admin/content/settings", icon: Settings },
     ]
   },
+  {
+    label: "Legal", icon: ShieldCheck, children: [
+      { label: "Privacy Policy", href: "/admin/legal/privacy", icon: ShieldCheck },
+      { label: "Terms of Service", href: "/admin/legal/terms", icon: ShieldCheck },
+      { label: "Cookie Policy", href: "/admin/legal/cookies", icon: ShieldCheck },
+    ]
+  },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
@@ -30,6 +39,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [contentOpen, setContentOpen] = useState(pathname.startsWith("/admin/content"));
+  const [legalOpen, setLegalOpen] = useState(pathname.startsWith("/admin/legal"));
   const [loggingOut, setLoggingOut] = useState(false);
 
   const handleLogout = async () => {
@@ -59,12 +69,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <nav className="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         {navItems.map((item) => {
           if (item.children) {
+            const sectionKey = item.label === "Legal" ? "legal" : "content";
+            const isOpen = sectionKey === "legal" ? legalOpen : contentOpen;
+            const toggleOpen = sectionKey === "legal"
+              ? () => setLegalOpen(!legalOpen)
+              : () => setContentOpen(!contentOpen);
+            const sectionActive = sectionKey === "legal"
+              ? pathname.startsWith("/admin/legal")
+              : pathname.startsWith("/admin/content");
             return (
               <div key={item.label}>
                 <button
-                  onClick={() => setContentOpen(!contentOpen)}
+                  onClick={toggleOpen}
                   className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-colors ${
-                    pathname.startsWith("/admin/content")
+                    sectionActive
                       ? "bg-[var(--brand-light)] text-[var(--brand)]"
                       : "text-[var(--text-secondary)] hover:bg-[var(--surface-alt)] hover:text-[var(--text-primary)]"
                   }`}
@@ -73,9 +91,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     <item.icon className="w-4 h-4" />
                     {item.label}
                   </div>
-                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${contentOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isOpen ? "rotate-180" : ""}`} />
                 </button>
-                {contentOpen && (
+                {isOpen && (
                   <div className="ml-4 mt-0.5 space-y-0.5">
                     {item.children.map((child) => (
                       <Link
@@ -173,12 +191,18 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {pathname === "/admin" && "Dashboard"}
             {pathname === "/admin/leads" && "Restaurant Leads"}
             {pathname === "/admin/contacts" && "Contact Messages"}
+            {pathname === "/admin/blogs" && "Blog Posts"}
+            {pathname === "/admin/blogs/new" && "New Post"}
+            {pathname.startsWith("/admin/blogs/") && pathname !== "/admin/blogs/new" && "Edit Post"}
             {pathname === "/admin/content/pricing" && "Pricing Plans"}
             {pathname === "/admin/content/tiers" && "Discount Tiers"}
             {pathname === "/admin/content/faqs" && "FAQs"}
             {pathname === "/admin/content/testimonials" && "Testimonials"}
             {pathname === "/admin/content/team" && "Team Members"}
             {pathname === "/admin/content/settings" && "Site Settings"}
+            {pathname === "/admin/legal/privacy" && "Privacy Policy"}
+            {pathname === "/admin/legal/terms" && "Terms of Service"}
+            {pathname === "/admin/legal/cookies" && "Cookie Policy"}
           </h1>
           <ThemeToggle />
         </header>

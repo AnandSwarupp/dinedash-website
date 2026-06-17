@@ -37,7 +37,8 @@ export default function PricingPage() {
     fetch("/api/admin/content/pricing")
       .then((r) => r.json())
       .then((data) => {
-        if (data && Array.isArray(data)) setPlans(data);
+        if (data?.data && Array.isArray(data.data))
+          setPlans(data.data.map((p: PricingPlan) => ({ ...p, id: p.id || `plan_${Date.now()}_${Math.random()}` })));
         setLoading(false);
       });
   }, []);
@@ -47,7 +48,7 @@ export default function PricingPage() {
     await fetch("/api/admin/content/pricing", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(plans),
+      body: JSON.stringify({ data: plans }),
     });
     setSaving(false);
     setSaved(true);
@@ -71,12 +72,17 @@ export default function PricingPage() {
       prev.map((p) => (p.id === planId ? { ...p, features: [...p.features, ""] } : p))
     );
 
-  const removeFeature = (planId: string, idx: number) =>
-    setPlans((prev) =>
-      prev.map((p) =>
-        p.id === planId ? { ...p, features: p.features.filter((_, i) => i !== idx) } : p
-      )
+  const removeFeature = async (planId: string, idx: number) => {
+    const updated = plans.map((p) =>
+      p.id === planId ? { ...p, features: p.features.filter((_, i) => i !== idx) } : p
     );
+    setPlans(updated);
+    await fetch("/api/admin/content/pricing", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data: updated }),
+    });
+  };
 
   if (loading) {
     return (
@@ -150,7 +156,19 @@ export default function PricingPage() {
                   />
                 </div>
               </div>
-              <button onClick={() => setPlans((p) => p.filter((x) => x.id !== plan.id))} className="text-red-400 hover:text-red-600 mt-1">
+              <button
+                type="button"
+                onClick={async () => {
+                  const updated = plans.filter((x) => x.id !== plan.id);
+                  setPlans(updated);
+                  await fetch("/api/admin/content/pricing", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ data: updated }),
+                  });
+                }}
+                className="text-red-400 hover:text-red-600 mt-1"
+              >
                 <Trash2 className="w-4 h-4" />
               </button>
             </div>

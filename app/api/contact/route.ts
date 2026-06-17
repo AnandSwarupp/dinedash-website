@@ -1,8 +1,21 @@
 import { NextRequest, NextResponse } from "next/server";
+import { randomUUID } from "crypto";
 import { connectDB } from "@/lib/mongodb";
 import { Contact } from "@/lib/models/Contact";
+import { rateLimit, getIp, isLocalhostDev } from "@/lib/rateLimit";
 
 export async function POST(req: NextRequest) {
+  const ip = getIp(req);
+  if (!isLocalhostDev(ip)) {
+    const { allowed, retryAfter } = rateLimit(ip, 3, 10 * 60 * 1000);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Too many submissions. Please wait before trying again." },
+        { status: 429, headers: { "Retry-After": String(retryAfter) } }
+      );
+    }
+  }
+
   try {
     const body = await req.json();
     const { name, email, subject, message, restaurantName, phone } = body;
@@ -19,7 +32,7 @@ export async function POST(req: NextRequest) {
     await connectDB();
 
     const contact = await Contact.create({
-      id: `contact_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      id: `contact_${randomUUID()}`,
       name: String(name).trim().slice(0, 100),
       email: String(email).trim().slice(0, 200),
       subject: String(subject || "General enquiry").trim().slice(0, 200),

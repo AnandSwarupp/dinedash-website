@@ -1,5 +1,36 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Check, QrCode, Timer, CreditCard, Award, Lock, Zap, Smartphone, Shield } from "lucide-react";
+import { getContent } from "@/lib/getContent";
+
+export const revalidate = 0;
+
+export const metadata: Metadata = {
+  title: "For Customers",
+  description:
+    "Earn up to 30% back on your restaurant meal just by eating quickly. No signup, no loyalty card, no account — just scan, eat, and get refunded automatically.",
+  alternates: { canonical: "/for-customers" },
+  openGraph: {
+    title: "For Customers | DineDash",
+    description: "Earn up to 30% back on your meal. No signup needed. Refund goes straight to your card.",
+    url: "https://dinedash.app/for-customers",
+  },
+};
+
+interface DbTier {
+  id: string;
+  label: string;
+  time: string;
+  discount: string;
+  description: string;
+}
+
+const tierStyles = [
+  { color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-500/10 border-green-300 dark:border-green-500/30" },
+  { color: "text-amber-500 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-500/10 border-amber-300 dark:border-amber-500/30" },
+  { color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-500/10 border-amber-400 dark:border-amber-500/30" },
+  { color: "text-stone-400 dark:text-slate-500", bg: "bg-stone-50 dark:bg-slate-700/20 border-stone-200 dark:border-slate-600/30" },
+];
 
 const steps = [
   { num: 1, icon: QrCode, title: "Scan the table QR", desc: "Open DineDash, tap Scan, and point at the QR code on your table. Your session opens automatically.", color: "bg-green-600" },
@@ -23,14 +54,24 @@ const tips = [
   "Even the slowest tier saves you money — finishing under 45 minutes earns 10% back.",
 ];
 
-const discountTiers = [
+const fallbackDiscountTiers = [
   { time: "Under 15 min", discount: "30%", color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-500/10 border-green-300 dark:border-green-500/30" },
   { time: "Under 30 min", discount: "20%", color: "text-amber-500 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-500/10 border-amber-300 dark:border-amber-500/30" },
   { time: "Under 45 min", discount: "10%", color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-500/10 border-amber-400 dark:border-amber-500/30" },
   { time: "Over 45 min",  discount: "0%",  color: "text-stone-400 dark:text-slate-500", bg: "bg-stone-50 dark:bg-slate-700/20 border-stone-200 dark:border-slate-600/30" },
 ];
 
-export default function ForCustomersPage() {
+export default async function ForCustomersPage() {
+  const dbTiers = await getContent<DbTier[]>("tiers");
+
+  const discountTiers = dbTiers && dbTiers.length > 0
+    ? dbTiers.map((t, i) => ({
+        time: t.time,
+        discount: t.discount,
+        ...(tierStyles[i] ?? tierStyles[tierStyles.length - 1]),
+      }))
+    : fallbackDiscountTiers;
+
   return (
     <div className="overflow-x-hidden">
       {/* HERO */}

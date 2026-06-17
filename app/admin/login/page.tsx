@@ -53,11 +53,11 @@ export default function AdminLoginPage() {
             <div>
               <label className="block text-sm font-semibold text-[var(--text-secondary)] mb-2">Email</label>
               <input
-                type="email"
+                type="text"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
                 required
-                placeholder="admin@dinedash.app"
+                placeholder="admin@dinedash"
                 className="w-full border border-[var(--border)] rounded-xl px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--brand)] bg-[var(--surface-alt)] text-sm"
               />
             </div>

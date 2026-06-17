@@ -1,5 +1,19 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check, QrCode, BarChart3, Smartphone, Users, TrendingUp, ChefHat, Zap, Shield, Settings } from "lucide-react";
+import { getContent } from "@/lib/getContent";
+
+export const metadata: Metadata = {
+  title: "For Restaurants",
+  description:
+    "Turn tables faster, eliminate walkouts, and serve more covers every day with DineDash. No hardware, no staff training — go live in under 1 hour.",
+  alternates: { canonical: "/for-restaurants" },
+  openGraph: {
+    title: "For Restaurants | DineDash",
+    description: "Turn tables faster, eliminate walkouts, go live in under 1 hour. No hardware needed.",
+    url: "https://dinedash.app/for-restaurants",
+  },
+};
 
 const benefits = [
   { icon: TrendingUp, title: "More covers per day", desc: "Customers who earn refunds for eating faster free up tables sooner. More covers = more revenue without any extra space.", stat: "+25%", statLabel: "avg. daily covers" },
@@ -17,7 +31,7 @@ const setupSteps = [
   { num: 4, title: "Place and go live", desc: "Stick table QR codes on each table, place the till QR at your counter. You're live.", icon: Zap },
 ];
 
-const faqs = [
+const fallbackFaqs = [
   { q: "Do my staff need a separate app?", a: "No. There's no waiter or staff app. Customers manage everything themselves through their own phone. Your staff simply focus on preparing and delivering food." },
   { q: "Can I set my own discount percentages?", a: "Yes. From your dashboard you can set custom time limits and refund percentages for your restaurant. Customers will always see your exact tiers in the app." },
   { q: "What if a customer overstays the time limit?", a: "They simply pay full price — they already paid upfront so there's nothing extra to collect. Your revenue is never at risk." },
@@ -25,7 +39,13 @@ const faqs = [
   { q: "Can I manage multiple locations?", a: "Yes. Our Restaurant Group plan supports multiple locations from a single dashboard with centralized reporting." },
 ];
 
-export default function ForRestaurantsPage() {
+export const revalidate = 0;
+
+export default async function ForRestaurantsPage() {
+  const dbFaqs = await getContent<{ question: string; answer: string }[]>("faqs");
+  const faqs = dbFaqs && dbFaqs.length > 0
+    ? dbFaqs.map((f) => ({ q: f.question, a: f.answer }))
+    : fallbackFaqs;
   return (
     <div className="overflow-x-hidden">
       {/* HERO */}

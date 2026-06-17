@@ -25,7 +25,7 @@ export default function FAQsPage() {
     fetch("/api/admin/content/faqs")
       .then((r) => r.json())
       .then((data) => {
-        if (data && Array.isArray(data)) setFaqs(data);
+        if (data?.data && Array.isArray(data.data)) setFaqs(data.data);
         setLoading(false);
       });
   }, []);
@@ -35,7 +35,7 @@ export default function FAQsPage() {
     await fetch("/api/admin/content/faqs", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(faqs),
+      body: JSON.stringify({ data: faqs }),
     });
     setSaving(false);
     setSaved(true);

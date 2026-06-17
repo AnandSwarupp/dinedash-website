@@ -1,8 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { Contact } from "@/lib/models/Contact";
+import { getAdminSession } from "@/lib/auth";
+
+function escapeRegex(str: string) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+const VALID_STATUSES = new Set(["new", "read", "replied"]);
 
 export async function GET(req: NextRequest) {
+  if (!(await getAdminSession())) {
+    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+  }
   try {
     await connectDB();
     const { searchParams } = new URL(req.url);
@@ -10,12 +20,13 @@ export async function GET(req: NextRequest) {
     const search = searchParams.get("search");
 
     const query: Record<string, unknown> = {};
-    if (status) query.status = status;
+    if (status && VALID_STATUSES.has(status)) query.status = status;
     if (search) {
+      const safe = escapeRegex(search.slice(0, 100));
       query.$or = [
-        { name: { $regex: search, $options: "i" } },
-        { email: { $regex: search, $options: "i" } },
-        { subject: { $regex: search, $options: "i" } },
+        { name: { $regex: safe, $options: "i" } },
+        { email: { $regex: safe, $options: "i" } },
+        { subject: { $regex: safe, $options: "i" } },
       ];
     }
 

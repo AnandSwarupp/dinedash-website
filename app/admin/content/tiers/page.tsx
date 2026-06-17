@@ -29,7 +29,7 @@ export default function TiersPage() {
     fetch("/api/admin/content/tiers")
       .then((r) => r.json())
       .then((data) => {
-        if (data && Array.isArray(data)) setTiers(data);
+        if (data?.data && Array.isArray(data.data)) setTiers(data.data);
         setLoading(false);
       });
   }, []);
@@ -39,7 +39,7 @@ export default function TiersPage() {
     await fetch("/api/admin/content/tiers", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(tiers),
+      body: JSON.stringify({ data: tiers }),
     });
     setSaving(false);
     setSaved(true);

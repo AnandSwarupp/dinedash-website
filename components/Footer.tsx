@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Zap, Mail, MapPin, Phone } from "lucide-react";
 
 function IconInstagram({ className }: { className?: string }) {
@@ -45,14 +48,52 @@ const footerLinks = {
   ],
 };
 
-const discountTiers = [
+const fallbackTiers = [
   { time: "< 15 min", discount: "30%", color: "text-green-400 bg-green-500/10 border-green-500/30" },
   { time: "< 30 min", discount: "20%", color: "text-amber-400 bg-amber-500/10 border-amber-500/30" },
   { time: "< 45 min", discount: "10%", color: "text-amber-300 bg-amber-500/10 border-amber-500/20" },
   { time: "> 45 min", discount: "0%",  color: "text-slate-500 bg-slate-700/20 border-slate-600/30" },
 ];
 
+const tierColors = [
+  "text-green-400 bg-green-500/10 border-green-500/30",
+  "text-amber-400 bg-amber-500/10 border-amber-500/30",
+  "text-amber-300 bg-amber-500/10 border-amber-500/20",
+  "text-slate-500 bg-slate-700/20 border-slate-600/30",
+];
+
+interface Settings { siteName?: string; tagline?: string; email?: string; phone?: string; address?: string; ctaPrimary?: string; ctaSecondary?: string; twitterUrl?: string; linkedinUrl?: string; instagramUrl?: string; }
+
 export default function Footer() {
+  const [tiers, setTiers] = useState(fallbackTiers);
+  const [settings, setSettings] = useState<Settings>({
+    siteName: "DineDash",
+    tagline: "Pay first. Eat fast. Get money back. The dining experience that rewards speed and helps restaurants serve more covers every day.",
+    email: "hello@dinedash.app",
+    phone: "+44 20 0000 0000",
+    address: "London, United Kingdom",
+    ctaPrimary: "Get Started Free",
+    ctaSecondary: "Talk to Us",
+  });
+
+  useEffect(() => {
+    fetch("/api/content/tiers")
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data?.data) && data.data.length > 0) {
+          setTiers(data.data.map((t: { time: string; discount: string }, i: number) => ({
+            time: t.time, discount: t.discount,
+            color: tierColors[i] ?? tierColors[tierColors.length - 1],
+          })));
+        }
+      }).catch(() => {});
+
+    fetch("/api/content/settings")
+      .then((r) => r.json())
+      .then((data) => { if (data?.data) setSettings(data.data); })
+      .catch(() => {});
+  }, []);
+
   return (
     <footer className="bg-[var(--surface-dark)] text-white">
       {/* Top CTA strip */}
@@ -64,10 +105,10 @@ export default function Footer() {
           </div>
           <div className="flex gap-3">
             <Link href="/get-started" className="bg-[#0F1623] text-[var(--brand)] font-bold px-6 py-3 rounded-full hover:opacity-90 transition-opacity">
-              Get Started Free
+              {settings.ctaPrimary || "Get Started Free"}
             </Link>
             <Link href="/contact" className="border-2 border-[#0F1623]/40 text-[#0F1623] font-semibold px-6 py-3 rounded-full hover:bg-[#0F1623]/10 transition-colors">
-              Talk to Us
+              {settings.ctaSecondary || "Talk to Us"}
             </Link>
           </div>
         </div>
@@ -78,7 +119,7 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto">
           <p className="text-[var(--text-muted)] text-sm mb-4 text-center">Speed discount tiers</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {discountTiers.map((tier) => (
+            {tiers.map((tier) => (
               <div key={tier.time} className={`rounded-xl border px-4 py-3 text-center ${tier.color}`}>
                 <div className="text-2xl font-bold">{tier.discount}</div>
                 <div className="text-xs mt-1 font-medium opacity-80">{tier.time}</div>
@@ -98,25 +139,31 @@ export default function Footer() {
                 <Zap className="w-5 h-5 text-[#0F1623] fill-[#0F1623]" />
               </div>
               <span className="text-xl font-bold text-white">
-                Dine<span className="text-[var(--brand)]">Dash</span>
+                {settings.siteName || "DineDash"}
               </span>
             </Link>
             <p className="text-[var(--text-muted)] text-sm leading-relaxed max-w-xs">
-              Pay first. Eat fast. Get money back. The dining experience that rewards speed and helps restaurants serve more covers every day.
+              {settings.tagline || "Pay first. Eat fast. Get money back. The dining experience that rewards speed and helps restaurants serve more covers every day."}
             </p>
             <div className="mt-6 space-y-2">
-              <div className="flex items-center gap-2 text-[var(--text-muted)] text-sm">
-                <Mail className="w-4 h-4 text-[var(--brand)]" />
-                <span>hello@dinedash.app</span>
-              </div>
-              <div className="flex items-center gap-2 text-[var(--text-muted)] text-sm">
-                <Phone className="w-4 h-4 text-[var(--brand)]" />
-                <span>+44 20 0000 0000</span>
-              </div>
-              <div className="flex items-center gap-2 text-[var(--text-muted)] text-sm">
-                <MapPin className="w-4 h-4 text-[var(--brand)]" />
-                <span>London, United Kingdom</span>
-              </div>
+              {settings.email && (
+                <div className="flex items-center gap-2 text-[var(--text-muted)] text-sm">
+                  <Mail className="w-4 h-4 text-[var(--brand)]" />
+                  <span>{settings.email}</span>
+                </div>
+              )}
+              {settings.phone && (
+                <div className="flex items-center gap-2 text-[var(--text-muted)] text-sm">
+                  <Phone className="w-4 h-4 text-[var(--brand)]" />
+                  <span>{settings.phone}</span>
+                </div>
+              )}
+              {settings.address && (
+                <div className="flex items-center gap-2 text-[var(--text-muted)] text-sm">
+                  <MapPin className="w-4 h-4 text-[var(--brand)]" />
+                  <span>{settings.address}</span>
+                </div>
+              )}
             </div>
             {/* App badges */}
             <div className="mt-6 flex gap-3">
@@ -178,15 +225,21 @@ export default function Footer() {
             <div className="mt-8">
               <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">Follow Us</h4>
               <div className="flex gap-3">
-                <a href="#" className="w-9 h-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-[var(--brand)] hover:border-[var(--brand)] transition-colors">
-                  <IconInstagram className="w-4 h-4" />
-                </a>
-                <a href="#" className="w-9 h-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-[var(--brand)] hover:border-[var(--brand)] transition-colors">
-                  <IconLinkedin className="w-4 h-4" />
-                </a>
-                <a href="#" className="w-9 h-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-[var(--brand)] hover:border-[var(--brand)] transition-colors">
-                  <IconFacebook className="w-4 h-4" />
-                </a>
+                {(settings.instagramUrl || "#") !== "" && (
+                  <a href={settings.instagramUrl || "#"} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-[var(--brand)] hover:border-[var(--brand)] transition-colors">
+                    <IconInstagram className="w-4 h-4" />
+                  </a>
+                )}
+                {(settings.linkedinUrl || "#") !== "" && (
+                  <a href={settings.linkedinUrl || "#"} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-[var(--brand)] hover:border-[var(--brand)] transition-colors">
+                    <IconLinkedin className="w-4 h-4" />
+                  </a>
+                )}
+                {(settings.twitterUrl || "#") !== "" && (
+                  <a href={settings.twitterUrl || "#"} target="_blank" rel="noopener noreferrer" className="w-9 h-9 bg-white/5 border border-white/10 rounded-xl flex items-center justify-center hover:bg-[var(--brand)] hover:border-[var(--brand)] transition-colors">
+                    <IconFacebook className="w-4 h-4" />
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -195,7 +248,7 @@ export default function Footer() {
         {/* Bottom bar */}
         <div className="mt-14 pt-8 border-t border-[var(--border)] flex flex-col md:flex-row items-center justify-between gap-4">
           <p className="text-[var(--text-muted)] text-sm">
-            © {new Date().getFullYear()} DineDash. All rights reserved.
+            © {new Date().getFullYear()} {settings.siteName || "DineDash"}. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2 text-[var(--text-muted)] text-sm">

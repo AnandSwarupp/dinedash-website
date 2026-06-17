@@ -1,7 +1,42 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check, X, Zap } from "lucide-react";
+import { getContent } from "@/lib/getContent";
 
-const plans = [
+export const revalidate = 0;
+
+export const metadata: Metadata = {
+  title: "Pricing",
+  description:
+    "Simple monthly plans for restaurants. Starter at £49/month, Growth at £99/month, Enterprise at £249/month. 14-day free trial, no credit card needed.",
+  alternates: { canonical: "/pricing" },
+  openGraph: {
+    title: "Pricing | DineDash",
+    description: "Simple monthly plans from £49/month. 14-day free trial, no credit card needed.",
+    url: "https://dinedash.app/pricing",
+  },
+};
+
+interface DbPlan {
+  id: string;
+  name: string;
+  price: string;
+  period: string;
+  description: string;
+  features: string[];
+  highlighted: boolean;
+  badge?: string;
+  cta: string;
+  ctaHref?: string;
+}
+
+interface DbFaq {
+  id: string;
+  question: string;
+  answer: string;
+}
+
+const fallbackPlans = [
   {
     name: "Starter",
     price: "£49",
@@ -70,7 +105,7 @@ const plans = [
   },
 ];
 
-const faqs = [
+const fallbackFaqs = [
   { q: "Is there a free trial?", a: "Yes — all plans include a 14-day free trial. No credit card required to start." },
   { q: "Are there transaction fees?", a: "DineDash charges no per-transaction fees. You pay a flat monthly subscription. Stripe's standard processing fees apply to the customer's upfront payment." },
   { q: "Who funds the customer's refund?", a: "The refund comes out of the customer's original payment. You receive the net amount after any refund is issued. The subscription fee is separate." },
@@ -79,7 +114,28 @@ const faqs = [
   { q: "Is there an annual discount?", a: "Yes — paying annually gives you 2 months free (equivalent to ~17% off). Contact us to switch to annual billing." },
 ];
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const dbPlans = await getContent<DbPlan[]>("pricing");
+  const dbFaqs = await getContent<DbFaq[]>("faqs");
+
+  const plans = dbPlans && dbPlans.length > 0
+    ? dbPlans.map((p) => ({
+        name: p.name,
+        price: p.price,
+        period: p.period,
+        description: p.description,
+        highlight: p.highlighted,
+        badge: p.badge || null,
+        features: p.features.map((text) => ({ text, included: true })),
+        cta: p.cta,
+        ctaHref: p.ctaHref || "/get-started",
+      }))
+    : fallbackPlans;
+
+  const faqs = dbFaqs && dbFaqs.length > 0
+    ? dbFaqs.map((f) => ({ q: f.question, a: f.answer }))
+    : fallbackFaqs;
+
   return (
     <div className="overflow-x-hidden">
       {/* HERO */}

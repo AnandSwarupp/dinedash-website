@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { jwtVerify } from "jose";
 
-const SECRET = new TextEncoder().encode(process.env.JWT_SECRET || "change-me-in-production");
+// Use empty string if secret missing — jwtVerify will always fail, which is the safe outcome
+const SECRET = new TextEncoder().encode(process.env.JWT_SECRET ?? "");
 const COOKIE_NAME = "dd_admin_token";
 
 export async function proxy(req: NextRequest) {
@@ -27,10 +28,17 @@ export async function proxy(req: NextRequest) {
       await jwtVerify(token, SECRET);
       return NextResponse.next();
     } catch {
-      if (pathname.startsWith("/api/")) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-      }
-      return NextResponse.redirect(new URL("/admin/login", req.url));
+      const res = pathname.startsWith("/api/")
+        ? NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+        : NextResponse.redirect(new URL("/admin/login", req.url));
+      res.cookies.set(COOKIE_NAME, "", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 0,
+        path: "/",
+      });
+      return res;
     }
   }
 

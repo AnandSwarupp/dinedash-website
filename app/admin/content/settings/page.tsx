@@ -41,7 +41,7 @@ export default function SettingsPage() {
     fetch("/api/admin/content/settings")
       .then((r) => r.json())
       .then((data) => {
-        if (data && typeof data === "object") setSettings({ ...defaults, ...data });
+        if (data?.data && typeof data.data === "object") setSettings({ ...defaults, ...data.data });
         setLoading(false);
       });
   }, []);
@@ -51,7 +51,7 @@ export default function SettingsPage() {
     await fetch("/api/admin/content/settings", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(settings),
+      body: JSON.stringify({ data: settings }),
     });
     setSaving(false);
     setSaved(true);

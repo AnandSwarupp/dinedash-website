@@ -1,7 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
+import { timingSafeEqual } from "crypto";
 import { createToken, COOKIE_NAME } from "@/lib/auth";
+import { rateLimit, getIp, isLocalhostDev } from "@/lib/rateLimit";
+
+function safeEqual(a: string, b: string): boolean {
+  const bufA = Buffer.from(a);
+  const bufB = Buffer.from(b);
+  if (bufA.length !== bufB.length) return false;
+  return timingSafeEqual(bufA, bufB);
+}
 
 export async function POST(req: NextRequest) {
+  const ip = getIp(req);
+  if (!isLocalhostDev(ip)) {
+    const { allowed, retryAfter } = rateLimit(ip, 5, 15 * 60 * 1000);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Too many login attempts. Try again later." },
+        { status: 429, headers: { "Retry-After": String(retryAfter) } }
+      );
+    }
+  }
+
   try {
     const { email, password } = await req.json();
 
@@ -12,7 +32,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Admin credentials not configured." }, { status: 500 });
     }
 
-    if (email !== adminEmail || password !== adminPassword) {
+    if (!safeEqual(email, adminEmail) || !safeEqual(password, adminPassword)) {
       return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
     }
 
@@ -23,7 +43,7 @@ export async function POST(req: NextRequest) {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 60 * 60 * 8, // 8 hours
       path: "/",
     });
 

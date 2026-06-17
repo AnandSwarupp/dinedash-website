@@ -1,8 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
+import { randomUUID } from "crypto";
 import { connectDB } from "@/lib/mongodb";
 import { Lead } from "@/lib/models/Lead";
+import { rateLimit, getIp, isLocalhostDev } from "@/lib/rateLimit";
+
+const VALID_PLANS = new Set(["starter", "growth", "enterprise"]);
 
 export async function POST(req: NextRequest) {
+  const ip = getIp(req);
+  if (!isLocalhostDev(ip)) {
+    const { allowed, retryAfter } = rateLimit(ip, 3, 10 * 60 * 1000);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Too many submissions. Please wait before trying again." },
+        { status: 429, headers: { "Retry-After": String(retryAfter) } }
+      );
+    }
+  }
+
   try {
     const body = await req.json();
     const { restaurantName, ownerName, email, phone, numberOfTables, plan, message } = body;
@@ -19,16 +34,18 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
     }
 
+    const safePlan = VALID_PLANS.has(String(plan)) ? String(plan) : "starter";
+
     await connectDB();
 
     const lead = await Lead.create({
-      id: `lead_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      id: `lead_${randomUUID()}`,
       restaurantName: String(restaurantName).trim().slice(0, 200),
       ownerName: String(ownerName).trim().slice(0, 100),
       email: String(email).trim().slice(0, 200),
       phone: phone ? String(phone).trim().slice(0, 50) : undefined,
-      numberOfTables: String(numberOfTables || "unknown").trim(),
-      plan: String(plan || "starter").trim(),
+      numberOfTables: String(numberOfTables || "unknown").trim().slice(0, 50),
+      plan: safePlan,
       message: message ? String(message).trim().slice(0, 1000) : undefined,
       status: "new",
       createdAt: new Date().toISOString(),

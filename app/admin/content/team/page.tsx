@@ -30,7 +30,7 @@ export default function TeamPage() {
     fetch("/api/admin/content/team")
       .then((r) => r.json())
       .then((data) => {
-        if (data && Array.isArray(data)) setMembers(data);
+        if (data?.data && Array.isArray(data.data)) setMembers(data.data);
         setLoading(false);
       });
   }, []);
@@ -40,7 +40,7 @@ export default function TeamPage() {
     await fetch("/api/admin/content/team", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(members),
+      body: JSON.stringify({ data: members }),
     });
     setSaving(false);
     setSaved(true);

@@ -1,5 +1,35 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Zap, Target, Heart, TrendingUp } from "lucide-react";
+import { getContent } from "@/lib/getContent";
+
+export const revalidate = 0;
+
+export const metadata: Metadata = {
+  title: "About DineDash",
+  description:
+    "We built DineDash to reward fast diners and help restaurants turn tables faster. Meet the team and learn the story behind the idea.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    title: "About DineDash",
+    description: "We built DineDash to reward fast diners and help restaurants turn tables faster.",
+    url: "https://dinedash.app/about",
+  },
+};
+
+interface DbMember {
+  id: string;
+  name: string;
+  role: string;
+  bio: string;
+  avatar?: string;
+  linkedin?: string;
+  twitter?: string;
+}
+
+function getInitials(name: string) {
+  return name.split(" ").slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+}
 
 const values = [
   { icon: Zap, title: "Speed is rewarded", desc: "We believe efficient dining should be celebrated, not just expected. Every second counts — and we make sure it pays off." },
@@ -8,13 +38,27 @@ const values = [
   { icon: TrendingUp, title: "Restaurants deserve better tech", desc: "The hospitality industry has been underserved by technology for too long. We're here to change that." },
 ];
 
-const team = [
-  { name: "Alex Chen", role: "Co-Founder & CEO", initials: "AC", color: "bg-green-600", bio: "Former restaurant operator who spent years frustrated by empty tables during peak hours." },
-  { name: "Maya Patel", role: "Co-Founder & CTO", initials: "MP", color: "bg-green-600", bio: "Ex-Stripe engineer who knows payments inside out and believes the refund model unlocks a new category." },
-  { name: "Tom Walsh", role: "Head of Restaurant Success", initials: "TW", color: "bg-amber-500", bio: "15 years in hospitality. Has personally onboarded 200+ restaurants across the UK." },
+const fallbackTeam = [
+  { name: "Alex Chen", role: "Co-Founder & CEO", initials: "AC", color: "bg-green-600", bio: "Former restaurant operator who spent years frustrated by empty tables during peak hours.", linkedin: "", twitter: "" },
+  { name: "Maya Patel", role: "Co-Founder & CTO", initials: "MP", color: "bg-green-600", bio: "Ex-Stripe engineer who knows payments inside out and believes the refund model unlocks a new category.", linkedin: "", twitter: "" },
+  { name: "Tom Walsh", role: "Head of Restaurant Success", initials: "TW", color: "bg-amber-500", bio: "15 years in hospitality. Has personally onboarded 200+ restaurants across the UK.", linkedin: "", twitter: "" },
 ];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const dbTeam = await getContent<DbMember[]>("team");
+
+  const team = dbTeam && dbTeam.length > 0
+    ? dbTeam.map((m) => ({
+        name: m.name,
+        role: m.role,
+        initials: getInitials(m.name),
+        color: "bg-green-600",
+        bio: m.bio,
+        linkedin: m.linkedin || "",
+        twitter: m.twitter || "",
+      }))
+    : fallbackTeam;
+
   return (
     <div className="overflow-x-hidden">
       {/* HERO */}
@@ -108,7 +152,21 @@ export default function AboutPage() {
                 </div>
                 <h3 className="font-bold text-[var(--text-primary)] text-lg">{member.name}</h3>
                 <div className="text-[var(--brand)] text-sm font-semibold mb-3">{member.role}</div>
-                <p className="text-[var(--text-muted)] text-sm leading-relaxed">{member.bio}</p>
+                <p className="text-[var(--text-muted)] text-sm leading-relaxed mb-4">{member.bio}</p>
+                {(member.linkedin || member.twitter) && (
+                  <div className="flex justify-center gap-3">
+                    {member.linkedin && (
+                      <a href={member.linkedin} target="_blank" rel="noopener noreferrer" className="text-xs text-[var(--text-muted)] hover:text-[var(--brand)] transition-colors border border-[var(--border)] rounded-lg px-3 py-1.5">
+                        LinkedIn
+                      </a>
+                    )}
+                    {member.twitter && (
+                      <a href={member.twitter} target="_blank" rel="noopener noreferrer" className="text-xs text-[var(--text-muted)] hover:text-[var(--brand)] transition-colors border border-[var(--border)] rounded-lg px-3 py-1.5">
+                        Twitter
+                      </a>
+                    )}
+                  </div>
+                )}
               </div>
             ))}
           </div>

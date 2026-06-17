@@ -32,7 +32,7 @@ export default function TestimonialsPage() {
     fetch("/api/admin/content/testimonials")
       .then((r) => r.json())
       .then((data) => {
-        if (data && Array.isArray(data)) setTestimonials(data);
+        if (data?.data && Array.isArray(data.data)) setTestimonials(data.data);
         setLoading(false);
       });
   }, []);
@@ -42,7 +42,7 @@ export default function TestimonialsPage() {
     await fetch("/api/admin/content/testimonials", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(testimonials),
+      body: JSON.stringify({ data: testimonials }),
     });
     setSaving(false);
     setSaved(true);

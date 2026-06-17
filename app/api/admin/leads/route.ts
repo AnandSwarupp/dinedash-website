@@ -1,8 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import { Lead } from "@/lib/models/Lead";
+import { getAdminSession } from "@/lib/auth";
+
+function escapeRegex(str: string) {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+const VALID_STATUSES = new Set(["new", "contacted", "active", "closed"]);
+const VALID_PLANS = new Set(["starter", "growth", "enterprise"]);
 
 export async function GET(req: NextRequest) {
+  if (!(await getAdminSession())) {
+    return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
+  }
   try {
     await connectDB();
     const { searchParams } = new URL(req.url);
@@ -11,13 +22,14 @@ export async function GET(req: NextRequest) {
     const search = searchParams.get("search");
 
     const query: Record<string, unknown> = {};
-    if (status) query.status = status;
-    if (plan) query.plan = plan;
+    if (status && VALID_STATUSES.has(status)) query.status = status;
+    if (plan && VALID_PLANS.has(plan)) query.plan = plan;
     if (search) {
+      const safe = escapeRegex(search.slice(0, 100));
       query.$or = [
-        { restaurantName: { $regex: search, $options: "i" } },
-        { ownerName: { $regex: search, $options: "i" } },
-        { email: { $regex: search, $options: "i" } },
+        { restaurantName: { $regex: safe, $options: "i" } },
+        { ownerName: { $regex: safe, $options: "i" } },
+        { email: { $regex: safe, $options: "i" } },
       ];
     }
 
@@ -26,8 +38,7 @@ export async function GET(req: NextRequest) {
     const newCount = await Lead.countDocuments({ status: "new" });
 
     return NextResponse.json({ leads, total, newCount });
-  } catch (e) {
-    console.error(e);
+  } catch {
     return NextResponse.json({ error: "Failed to fetch leads." }, { status: 500 });
   }
 }
