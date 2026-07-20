@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import { Blog } from "@/lib/models/Blog";
+import { eq } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { blogs } from "@/lib/db/schema";
 import { getAdminSession } from "@/lib/auth";
 
 function estimateReadingTime(content: string) {
@@ -13,9 +14,8 @@ export async function GET(_req: NextRequest, { params }: { params: Promise<{ slu
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
   try {
-    await connectDB();
     const { slug } = await params;
-    const post = await Blog.findOne({ slug }).lean();
+    const [post] = await db.select().from(blogs).where(eq(blogs.slug, slug)).limit(1);
     if (!post) return NextResponse.json({ error: "Post not found." }, { status: 404 });
     return NextResponse.json({ post });
   } catch {
@@ -28,7 +28,6 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ slug
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
   try {
-    await connectDB();
     const { slug } = await params;
     const body = await req.json();
     const { title, excerpt, content, author, authorRole, category, tags, coverImage, status } = body;
@@ -39,14 +38,15 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ slug
       coverImage: coverImage || "",
       status: status || "draft",
       readingTime: estimateReadingTime(content || ""),
+      updatedAt: new Date(),
     };
 
-    const existing = await Blog.findOne({ slug }).lean() as { status?: string } | null;
+    const [existing] = await db.select({ status: blogs.status }).from(blogs).where(eq(blogs.slug, slug)).limit(1);
     if (status === "published" && existing?.status !== "published") {
       update.publishedAt = new Date().toISOString();
     }
 
-    const post = await Blog.findOneAndUpdate({ slug }, { $set: update }, { new: true });
+    const [post] = await db.update(blogs).set(update).where(eq(blogs.slug, slug)).returning();
     if (!post) return NextResponse.json({ error: "Post not found." }, { status: 404 });
     return NextResponse.json({ post });
   } catch {
@@ -59,9 +59,8 @@ export async function DELETE(_req: NextRequest, { params }: { params: Promise<{ 
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
   try {
-    await connectDB();
     const { slug } = await params;
-    await Blog.findOneAndDelete({ slug });
+    await db.delete(blogs).where(eq(blogs.slug, slug));
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json({ error: "Failed to delete post." }, { status: 500 });

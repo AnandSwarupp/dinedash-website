@@ -13,6 +13,12 @@ export async function proxy(req: NextRequest) {
     return NextResponse.next();
   }
 
+  // Supply orders API accepts either the admin cookie or an X-Admin-Key header
+  // (for external/server-to-server callers) — auth is handled in the route itself.
+  if (pathname.startsWith("/api/admin/supplies")) {
+    return NextResponse.next();
+  }
+
   // Protect all /admin/* routes and /api/admin/* routes
   if (pathname.startsWith("/admin") || pathname.startsWith("/api/admin")) {
     const token = req.cookies.get(COOKIE_NAME)?.value;

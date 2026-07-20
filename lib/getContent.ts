@@ -1,12 +1,12 @@
-import { connectDB } from "./mongodb";
-import { SiteContent } from "./models/SiteContent";
+import { eq } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { siteContent } from "@/lib/db/schema";
 
 export async function getContent<T>(section: string): Promise<T | null> {
   try {
-    await connectDB();
-    const doc = await SiteContent.findOne({ section }).lean();
-    if (!doc) return null;
-    return (doc as { data: T }).data;
+    const [row] = await db.select().from(siteContent).where(eq(siteContent.section, section)).limit(1);
+    if (!row) return null;
+    return row.data as T;
   } catch {
     return null;
   }

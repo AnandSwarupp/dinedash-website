@@ -61,7 +61,7 @@ export default function TestimonialsPage() {
   }
 
   return (
-    <div className="space-y-5 max-w-3xl">
+    <div className="space-y-5 max-w-3xl mx-auto">
       <div className="flex items-center justify-between">
         <p className="text-sm text-[var(--text-muted)]">Manage customer testimonials.</p>
         <div className="flex gap-3">

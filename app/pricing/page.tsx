@@ -49,7 +49,7 @@ const fallbackPlans = [
       { text: "QR code generation (table + till)", included: true },
       { text: "Digital menu management", included: true },
       { text: "Real-time session dashboard", included: true },
-      { text: "Custom time tiers & refund %", included: true },
+      { text: "Custom time tiers & discount %", included: true },
       { text: "Stripe payment processing", included: true },
       { text: "Email support", included: true },
       { text: "Multi-location management", included: false },
@@ -71,7 +71,7 @@ const fallbackPlans = [
       { text: "QR code generation (table + till)", included: true },
       { text: "Digital menu management", included: true },
       { text: "Real-time session dashboard", included: true },
-      { text: "Custom time tiers & refund %", included: true },
+      { text: "Custom time tiers & discount %", included: true },
       { text: "Stripe payment processing", included: true },
       { text: "Priority email & chat support", included: true },
       { text: "Advanced analytics & reports", included: true },
@@ -93,7 +93,7 @@ const fallbackPlans = [
       { text: "QR code generation (table + till)", included: true },
       { text: "Digital menu management", included: true },
       { text: "Real-time session dashboard", included: true },
-      { text: "Custom time tiers & refund %", included: true },
+      { text: "Custom time tiers & discount %", included: true },
       { text: "Stripe payment processing", included: true },
       { text: "Priority 24/7 support", included: true },
       { text: "Advanced analytics & reports", included: true },
@@ -107,8 +107,8 @@ const fallbackPlans = [
 
 const fallbackFaqs = [
   { q: "Is there a free trial?", a: "Yes — all plans include a 14-day free trial. No credit card required to start." },
-  { q: "Are there transaction fees?", a: "DineDash charges no per-transaction fees. You pay a flat monthly subscription. Stripe's standard processing fees apply to the customer's upfront payment." },
-  { q: "Who funds the customer's refund?", a: "The refund comes out of the customer's original payment. You receive the net amount after any refund is issued. The subscription fee is separate." },
+  { q: "Are there transaction fees?", a: "DineDash charges no per-transaction fees. You pay a flat monthly subscription. Stripe's standard processing fees apply to the customer's payment." },
+  { q: "Who funds the customer's discount?", a: "The discount simply reduces the total the customer pays at checkout — you receive the discounted amount directly. There's no separate refund to fund; the subscription fee is what covers DineDash." },
   { q: "Can I switch plans?", a: "Yes. You can upgrade or downgrade at any time. Changes take effect at the start of your next billing cycle." },
   { q: "What happens if I cancel?", a: "You can cancel at any time. Your account remains active until the end of your paid period, then closes automatically." },
   { q: "Is there an annual discount?", a: "Yes — paying annually gives you 2 months free (equivalent to ~17% off). Contact us to switch to annual billing." },
@@ -239,7 +239,7 @@ export default async function PricingPage() {
               <div className="text-4xl mb-4">🍽️</div>
               <h3 className="text-xl font-bold text-[var(--text-primary)] mb-4">For diners — always free</h3>
               <ul className="space-y-3">
-                {["Download the app — free","No account or signup required","Scan any participating restaurant","Pay upfront via card / Apple Pay / Google Pay","Get up to 30% automatically refunded"].map((item) => (
+                {["Download the app — free","Quick one-time sign-in","Scan any participating restaurant","Eat fast to earn your discount","Pay via card or cash — discount already applied"].map((item) => (
                   <li key={item} className="flex items-center gap-3 text-sm text-[var(--text-secondary)]">
                     <Check className="w-4 h-4 text-[var(--brand)] flex-shrink-0" /> {item}
                   </li>

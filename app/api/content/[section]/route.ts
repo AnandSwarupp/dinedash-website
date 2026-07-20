@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import { SiteContent } from "@/lib/models/SiteContent";
+import { eq } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { siteContent } from "@/lib/db/schema";
 
 const VALID_SECTIONS = new Set([
   "pricing", "tiers", "faqs", "testimonials", "team", "settings",
@@ -9,14 +10,13 @@ const VALID_SECTIONS = new Set([
 
 export async function GET(_req: NextRequest, { params }: { params: Promise<{ section: string }> }) {
   try {
-    await connectDB();
     const { section } = await params;
     if (!VALID_SECTIONS.has(section)) {
       return NextResponse.json({ data: null });
     }
-    const doc = await SiteContent.findOne({ section }).lean();
-    if (!doc) return NextResponse.json({ data: null });
-    return NextResponse.json({ data: (doc as { data: unknown }).data });
+    const [row] = await db.select().from(siteContent).where(eq(siteContent.section, section)).limit(1);
+    if (!row) return NextResponse.json({ data: null });
+    return NextResponse.json({ data: row.data });
   } catch {
     return NextResponse.json({ data: null });
   }

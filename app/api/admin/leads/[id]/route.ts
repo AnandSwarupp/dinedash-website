@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import { Lead } from "@/lib/models/Lead";
+import { eq } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { leads } from "@/lib/db/schema";
 import { getAdminSession } from "@/lib/auth";
 
 export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
@@ -8,17 +9,21 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
   try {
-    await connectDB();
     const { id } = await params;
     const body = await req.json();
 
     // Only allow updating the status field
-    const allowed: Record<string, unknown> = {};
-    if (body.status && ["new", "contacted", "active", "closed"].includes(body.status)) {
-      allowed.status = body.status;
+    if (!body.status || !["new", "contacted", "active", "closed"].includes(body.status)) {
+      const [lead] = await db.select().from(leads).where(eq(leads.id, id)).limit(1);
+      if (!lead) return NextResponse.json({ error: "Not found." }, { status: 404 });
+      return NextResponse.json({ lead });
     }
 
-    const lead = await Lead.findOneAndUpdate({ id }, { $set: allowed }, { new: true });
+    const [lead] = await db
+      .update(leads)
+      .set({ status: body.status, updatedAt: new Date() })
+      .where(eq(leads.id, id))
+      .returning();
     if (!lead) return NextResponse.json({ error: "Not found." }, { status: 404 });
     return NextResponse.json({ lead });
   } catch {
@@ -31,9 +36,8 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ i
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
   try {
-    await connectDB();
     const { id } = await params;
-    await Lead.findOneAndDelete({ id });
+    await db.delete(leads).where(eq(leads.id, id));
     return NextResponse.json({ success: true });
   } catch {
     return NextResponse.json({ error: "Failed to delete." }, { status: 500 });

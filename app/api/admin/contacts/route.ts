@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import { Contact } from "@/lib/models/Contact";
+import { and, count, desc, eq, ilike, or, SQL } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { contacts } from "@/lib/db/schema";
 import { getAdminSession } from "@/lib/auth";
-
-function escapeRegex(str: string) {
-  return str.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-}
 
 const VALID_STATUSES = new Set(["new", "read", "replied"]);
 
@@ -14,27 +11,34 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
   try {
-    await connectDB();
     const { searchParams } = new URL(req.url);
     const status = searchParams.get("status");
     const search = searchParams.get("search");
 
-    const query: Record<string, unknown> = {};
-    if (status && VALID_STATUSES.has(status)) query.status = status;
+    const conditions: SQL[] = [];
+    if (status && VALID_STATUSES.has(status)) {
+      conditions.push(eq(contacts.status, status as "new" | "read" | "replied"));
+    }
     if (search) {
-      const safe = escapeRegex(search.slice(0, 100));
-      query.$or = [
-        { name: { $regex: safe, $options: "i" } },
-        { email: { $regex: safe, $options: "i" } },
-        { subject: { $regex: safe, $options: "i" } },
-      ];
+      const term = `%${search.slice(0, 100)}%`;
+      conditions.push(
+        or(
+          ilike(contacts.name, term),
+          ilike(contacts.email, term),
+          ilike(contacts.subject, term)
+        )!
+      );
     }
 
-    const contacts = await Contact.find(query).sort({ createdAt: -1 }).lean();
-    const total = await Contact.countDocuments({});
-    const newCount = await Contact.countDocuments({ status: "new" });
+    const where = conditions.length ? and(...conditions) : undefined;
 
-    return NextResponse.json({ contacts, total, newCount });
+    const [rows, [{ value: total }], [{ value: newCount }]] = await Promise.all([
+      db.select().from(contacts).where(where).orderBy(desc(contacts.createdAt)),
+      db.select({ value: count() }).from(contacts),
+      db.select({ value: count() }).from(contacts).where(eq(contacts.status, "new")),
+    ]);
+
+    return NextResponse.json({ contacts: rows, total, newCount });
   } catch {
     return NextResponse.json({ error: "Failed to fetch contacts." }, { status: 500 });
   }

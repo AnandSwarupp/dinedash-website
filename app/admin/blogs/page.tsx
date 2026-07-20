@@ -53,7 +53,7 @@ export default function BlogsAdminPage() {
   }
 
   return (
-    <div className="space-y-5 max-w-5xl">
+    <div className="space-y-5 max-w-5xl mx-auto">
       <div className="flex items-center justify-between">
         <p className="text-sm text-[var(--text-muted)]">{posts.length} post{posts.length !== 1 ? "s" : ""} total</p>
         <Link

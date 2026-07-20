@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
-import { connectDB } from "@/lib/mongodb";
-import { Contact } from "@/lib/models/Contact";
+import { db } from "@/lib/db";
+import { contacts } from "@/lib/db/schema";
 import { rateLimit, getIp, isLocalhostDev } from "@/lib/rateLimit";
 
 export async function POST(req: NextRequest) {
@@ -29,19 +29,19 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid email address." }, { status: 400 });
     }
 
-    await connectDB();
-
-    const contact = await Contact.create({
-      id: `contact_${randomUUID()}`,
-      name: String(name).trim().slice(0, 100),
-      email: String(email).trim().slice(0, 200),
-      subject: String(subject || "General enquiry").trim().slice(0, 200),
-      message: String(message).trim().slice(0, 2000),
-      restaurantName: restaurantName ? String(restaurantName).trim().slice(0, 200) : undefined,
-      phone: phone ? String(phone).trim().slice(0, 50) : undefined,
-      status: "new",
-      createdAt: new Date().toISOString(),
-    });
+    const [contact] = await db
+      .insert(contacts)
+      .values({
+        id: `contact_${randomUUID()}`,
+        name: String(name).trim().slice(0, 100),
+        email: String(email).trim().slice(0, 200),
+        subject: String(subject || "General enquiry").trim().slice(0, 200),
+        message: String(message).trim().slice(0, 2000),
+        restaurantName: restaurantName ? String(restaurantName).trim().slice(0, 200) : undefined,
+        phone: phone ? String(phone).trim().slice(0, 50) : undefined,
+        status: "new",
+      })
+      .returning();
 
     return NextResponse.json({
       success: true,

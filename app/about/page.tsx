@@ -33,14 +33,14 @@ function getInitials(name: string) {
 
 const values = [
   { icon: Zap, title: "Speed is rewarded", desc: "We believe efficient dining should be celebrated, not just expected. Every second counts — and we make sure it pays off." },
-  { icon: Target, title: "Friction should be zero", desc: "No signups. No loyalty cards. No apps for staff. We obsess over removing every unnecessary step from the dining experience." },
-  { icon: Heart, title: "Win-win design", desc: "The best product is one where both sides benefit. Restaurants get more covers. Diners get real money back. Always both." },
+  { icon: Target, title: "Friction should be zero", desc: "No loyalty cards. No apps for staff. Just a quick sign-in — we obsess over removing every unnecessary step from the dining experience." },
+  { icon: Heart, title: "Win-win design", desc: "The best product is one where both sides benefit. Restaurants get more covers. Diners pay less for eating fast. Always both." },
   { icon: TrendingUp, title: "Restaurants deserve better tech", desc: "The hospitality industry has been underserved by technology for too long. We're here to change that." },
 ];
 
 const fallbackTeam = [
   { name: "Alex Chen", role: "Co-Founder & CEO", initials: "AC", color: "bg-green-600", bio: "Former restaurant operator who spent years frustrated by empty tables during peak hours.", linkedin: "", twitter: "" },
-  { name: "Maya Patel", role: "Co-Founder & CTO", initials: "MP", color: "bg-green-600", bio: "Ex-Stripe engineer who knows payments inside out and believes the refund model unlocks a new category.", linkedin: "", twitter: "" },
+  { name: "Maya Patel", role: "Co-Founder & CTO", initials: "MP", color: "bg-green-600", bio: "Ex-Stripe engineer who knows payments inside out and believes the pay-less-for-speed model unlocks a new category.", linkedin: "", twitter: "" },
   { name: "Tom Walsh", role: "Head of Restaurant Success", initials: "TW", color: "bg-amber-500", bio: "15 years in hospitality. Has personally onboarded 200+ restaurants across the UK.", linkedin: "", twitter: "" },
 ];
 

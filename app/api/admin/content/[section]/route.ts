@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import { connectDB } from "@/lib/mongodb";
-import { SiteContent } from "@/lib/models/SiteContent";
+import { eq } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { siteContent } from "@/lib/db/schema";
 import { getAdminSession } from "@/lib/auth";
 
 const VALID_SECTIONS = new Set([
@@ -13,14 +14,13 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ sect
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
   try {
-    await connectDB();
     const { section } = await params;
     if (!VALID_SECTIONS.has(section)) {
       return NextResponse.json({ error: "Invalid section." }, { status: 400 });
     }
-    const doc = await SiteContent.findOne({ section }).lean();
-    if (!doc) return NextResponse.json({ error: "Section not found." }, { status: 404 });
-    return NextResponse.json({ data: (doc as { data: unknown }).data });
+    const [row] = await db.select().from(siteContent).where(eq(siteContent.section, section)).limit(1);
+    if (!row) return NextResponse.json({ error: "Section not found." }, { status: 404 });
+    return NextResponse.json({ data: row.data });
   } catch {
     return NextResponse.json({ error: "Failed to fetch content." }, { status: 500 });
   }
@@ -46,7 +46,6 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ sect
     return NextResponse.json({ error: "Unauthorized." }, { status: 401 });
   }
   try {
-    await connectDB();
     const { section } = await params;
     if (!VALID_SECTIONS.has(section)) {
       return NextResponse.json({ error: "Invalid section." }, { status: 400 });
@@ -57,13 +56,16 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ sect
       ? sanitizeTestimonials(body.data)
       : body.data;
 
-    const doc = await SiteContent.findOneAndUpdate(
-      { section },
-      { $set: { data: safeData } },
-      { new: true, upsert: true }
-    );
+    const [row] = await db
+      .insert(siteContent)
+      .values({ section, data: safeData })
+      .onConflictDoUpdate({
+        target: siteContent.section,
+        set: { data: safeData, updatedAt: new Date() },
+      })
+      .returning();
 
-    return NextResponse.json({ data: doc.data });
+    return NextResponse.json({ data: row.data });
   } catch {
     return NextResponse.json({ error: "Failed to update content." }, { status: 500 });
   }

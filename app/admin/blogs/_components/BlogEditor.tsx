@@ -90,7 +90,7 @@ export default function BlogEditor({
   const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
   return (
-    <div className="max-w-4xl space-y-5">
+    <div className="max-w-4xl mx-auto space-y-5">
       {/* Toolbar */}
       <div className="flex items-center gap-3 flex-wrap">
         <button

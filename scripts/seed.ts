@@ -1,13 +1,15 @@
 /**
  * Run with: npx tsx scripts/seed.ts
- * Seeds MongoDB with the current hardcoded site content.
+ * Seeds Neon (Postgres) with the current hardcoded site content.
  * Safe to re-run — uses upsert so existing data is overwritten.
  */
 
 // Load .env.local manually before any imports that need env vars
 import { readFileSync } from "fs";
 import { resolve } from "path";
-import mongoose from "mongoose";
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
+import { siteContent } from "../lib/db/schema";
 
 try {
   const env = readFileSync(resolve(process.cwd(), ".env.local"), "utf-8");
@@ -24,17 +26,13 @@ try {
   // .env.local not found — rely on actual env vars
 }
 
-const uri = process.env.MONGODB_URI;
+const uri = process.env.DATABASE_URL;
 if (!uri) {
-  console.error("MONGODB_URI not set in .env.local");
+  console.error("DATABASE_URL not set in .env.local");
   process.exit(1);
 }
 
-const SiteContentSchema = new mongoose.Schema({
-  section: { type: String, required: true, unique: true },
-  data: { type: mongoose.Schema.Types.Mixed, required: true },
-});
-const SiteContent = mongoose.models.SiteContent || mongoose.model("SiteContent", SiteContentSchema);
+const db = drizzle(neon(uri), { schema: { siteContent } });
 
 const content: Record<string, unknown> = {
   pricing: [
@@ -195,19 +193,16 @@ const content: Record<string, unknown> = {
 };
 
 async function seed() {
-  await mongoose.connect(uri!);
-  console.log("Connected to MongoDB");
+  console.log("Connected to Neon");
 
   for (const [section, data] of Object.entries(content)) {
-    await SiteContent.findOneAndUpdate(
-      { section },
-      { section, data },
-      { upsert: true, new: true }
-    );
+    await db
+      .insert(siteContent)
+      .values({ section, data })
+      .onConflictDoUpdate({ target: siteContent.section, set: { data, updatedAt: new Date() } });
     console.log(`✓ Seeded: ${section}`);
   }
 
-  await mongoose.disconnect();
   console.log("\nDone! All content sections seeded.");
 }
 

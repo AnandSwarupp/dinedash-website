@@ -16,12 +16,12 @@ export const metadata: Metadata = {
 };
 
 const benefits = [
-  { icon: TrendingUp, title: "More covers per day", desc: "Customers who earn refunds for eating faster free up tables sooner. More covers = more revenue without any extra space.", stat: "+25%", statLabel: "avg. daily covers" },
-  { icon: Shield, title: "Upfront payment — zero walkouts", desc: "Every diner pays in full before the timer starts. No more unpaid bills or dine-and-dash situations.", stat: "£0", statLabel: "unpaid bills" },
+  { icon: TrendingUp, title: "More covers per day", desc: "Customers who save by eating faster free up tables sooner. More covers = more revenue without any extra space.", stat: "+25%", statLabel: "avg. daily covers" },
+  { icon: Shield, title: "Fast, friction-free checkout", desc: "Diners settle up with one scan at the till — no card machines, no waiting on staff to bring the bill.", stat: "1 scan", statLabel: "to pay" },
   { icon: QrCode, title: "Zero staff training needed", desc: "There's no waiter app. No POS integration required. Just print QR codes, place them on tables, and go live.", stat: "<1hr", statLabel: "to go live" },
   { icon: BarChart3, title: "Real-time session dashboard", desc: "See every active dining session, which tier each table is in, and your daily turnover stats — all in one place.", stat: "Live", statLabel: "session tracking" },
   { icon: Smartphone, title: "Manage from anywhere", desc: "Update your menu, view sessions, and manage tables from your phone. No desktop required.", stat: "iOS + Android", statLabel: "owner dashboard" },
-  { icon: Settings, title: "Fully customisable tiers", desc: "Set your own time limits and refund percentages. Default is 15/30/45 min but you can tune it to your service style.", stat: "Custom", statLabel: "tier control" },
+  { icon: Settings, title: "Fully customisable tiers", desc: "Set your own time limits and discount percentages. Default is 15/30/45 min but you can tune it to your service style.", stat: "Custom", statLabel: "tier control" },
 ];
 
 const setupSteps = [
@@ -33,9 +33,9 @@ const setupSteps = [
 
 const fallbackFaqs = [
   { q: "Do my staff need a separate app?", a: "No. There's no waiter or staff app. Customers manage everything themselves through their own phone. Your staff simply focus on preparing and delivering food." },
-  { q: "Can I set my own discount percentages?", a: "Yes. From your dashboard you can set custom time limits and refund percentages for your restaurant. Customers will always see your exact tiers in the app." },
-  { q: "What if a customer overstays the time limit?", a: "They simply pay full price — they already paid upfront so there's nothing extra to collect. Your revenue is never at risk." },
-  { q: "How does the subscription work?", a: "You pay a monthly or annual subscription fee. There are no per-transaction fees from DineDash — the refund is funded by the discount you set for your restaurant." },
+  { q: "Can I set my own discount percentages?", a: "Yes. From your dashboard you can set custom time limits and discount percentages for your restaurant. Customers will always see your exact tiers in the app." },
+  { q: "What if a customer overstays the time limit?", a: "They simply pay full price when they scan to pay at the till — no discount applies past your slowest tier. Payment still happens in one scan, just like any other table." },
+  { q: "How does the subscription work?", a: "You pay a monthly or annual subscription fee. There are no per-transaction fees from DineDash — the discount is set by you and simply reduces what the diner pays at checkout." },
   { q: "Can I manage multiple locations?", a: "Yes. Our Restaurant Group plan supports multiple locations from a single dashboard with centralized reporting." },
 ];
 

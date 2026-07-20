@@ -68,7 +68,7 @@ export default function LegalEditor({ section, title, publicPath }: LegalEditorP
   }
 
   return (
-    <div className="space-y-5 max-w-3xl">
+    <div className="space-y-5 max-w-3xl mx-auto">
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
           <a

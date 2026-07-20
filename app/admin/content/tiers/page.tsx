@@ -58,7 +58,7 @@ export default function TiersPage() {
   }
 
   return (
-    <div className="space-y-5 max-w-2xl">
+    <div className="space-y-5 max-w-2xl mx-auto">
       <div className="flex items-center justify-between">
         <p className="text-sm text-[var(--text-muted)]">Configure delivery time discount tiers.</p>
         <div className="flex gap-3">

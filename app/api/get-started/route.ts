@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { randomUUID } from "crypto";
-import { connectDB } from "@/lib/mongodb";
-import { Lead } from "@/lib/models/Lead";
+import { db } from "@/lib/db";
+import { leads } from "@/lib/db/schema";
 import { rateLimit, getIp, isLocalhostDev } from "@/lib/rateLimit";
 
 const VALID_PLANS = new Set(["starter", "growth", "enterprise"]);
@@ -36,20 +36,20 @@ export async function POST(req: NextRequest) {
 
     const safePlan = VALID_PLANS.has(String(plan)) ? String(plan) : "starter";
 
-    await connectDB();
-
-    const lead = await Lead.create({
-      id: `lead_${randomUUID()}`,
-      restaurantName: String(restaurantName).trim().slice(0, 200),
-      ownerName: String(ownerName).trim().slice(0, 100),
-      email: String(email).trim().slice(0, 200),
-      phone: phone ? String(phone).trim().slice(0, 50) : undefined,
-      numberOfTables: String(numberOfTables || "unknown").trim().slice(0, 50),
-      plan: safePlan,
-      message: message ? String(message).trim().slice(0, 1000) : undefined,
-      status: "new",
-      createdAt: new Date().toISOString(),
-    });
+    const [lead] = await db
+      .insert(leads)
+      .values({
+        id: `lead_${randomUUID()}`,
+        restaurantName: String(restaurantName).trim().slice(0, 200),
+        ownerName: String(ownerName).trim().slice(0, 100),
+        email: String(email).trim().slice(0, 200),
+        phone: phone ? String(phone).trim().slice(0, 50) : undefined,
+        numberOfTables: String(numberOfTables || "unknown").trim().slice(0, 50),
+        plan: safePlan,
+        message: message ? String(message).trim().slice(0, 1000) : undefined,
+        status: "new",
+      })
+      .returning();
 
     return NextResponse.json({
       success: true,

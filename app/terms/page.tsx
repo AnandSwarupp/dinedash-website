@@ -19,14 +19,14 @@ const FALLBACK = {
     {
       heading: "1. Using DineDash",
       body: [
-        "DineDash lets diners pay for their meal upfront and receive an automatic partial refund based on how quickly they finish, subject to the tiers shown at the time of payment.",
+        "DineDash lets diners start a timer when they order, then pay for their meal with an automatic partial discount based on how quickly they finish, subject to the tiers shown at the time of payment.",
         "Restaurants subscribe to a monthly plan to access the DineDash dashboard, QR codes, and table-session tools. Plan details and pricing are described on our Pricing page and may change with notice.",
       ],
     },
     {
-      heading: "2. Payments and refunds",
+      heading: "2. Payments and discounts",
       body: [
-        "All payments are processed securely via Stripe. Refund percentages are calculated automatically based on the dining session timer and are credited back to the original payment method.",
+        "All payments are processed securely via Stripe. Discount percentages are calculated automatically based on the dining session timer and applied to the bill before your card is charged.",
         "Restaurant subscriptions include a 14-day free trial. You may cancel at any time before the trial ends without being charged.",
       ],
     },

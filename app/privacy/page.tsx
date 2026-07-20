@@ -19,7 +19,7 @@ const FALLBACK = {
     {
       heading: "1. Information we collect",
       body: [
-        "When you use DineDash as a diner, we generate an anonymous session ID on your device — no account, email, or personal details are required to use the core service.",
+        "When you sign in to DineDash as a diner, we collect the details you provide — such as your phone number, email address, or Apple/Google account identifier — to create and remember your account.",
         "When you contact us, sign up for a restaurant trial, or subscribe to updates, we collect the information you provide directly, such as your name, email address, phone number, and restaurant details.",
         "Payments are processed by Stripe. We do not store your card details — Stripe handles all payment data under its own privacy and security policies.",
       ],
@@ -27,7 +27,7 @@ const FALLBACK = {
     {
       heading: "2. How we use your information",
       body: [
-        "To operate the refund-timer service, process payments, and provide restaurant dashboards.",
+        "To operate the discount-timer service, process payments, and provide restaurant dashboards.",
         "To respond to support requests and communicate about your account or trial.",
         "To improve our product through aggregated, anonymised usage analytics.",
       ],

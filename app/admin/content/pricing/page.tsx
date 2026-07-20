@@ -93,7 +93,7 @@ export default function PricingPage() {
   }
 
   return (
-    <div className="space-y-5 max-w-4xl">
+    <div className="space-y-5 max-w-4xl mx-auto">
       <div className="flex items-center justify-between">
         <p className="text-sm text-[var(--text-muted)]">Edit pricing plans shown on the website.</p>
         <div className="flex gap-3">

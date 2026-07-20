@@ -15,8 +15,8 @@ const steps = [
     title: "Scan the QR code on your table",
     color: "bg-green-600",
     details: [
-      "Open DineDash and tap the Scan tab.",
-      "Point your camera at the QR code on your table — your dining session opens automatically.",
+      "Open DineDash and sign in — a quick one-time step with your phone, email, or Apple/Google account.",
+      "Tap the Scan tab and point your camera at the QR code on your table — your dining session opens automatically.",
       "Browse the in-app menu and tap + on each item you want.",
       "Your running total appears in a bar at the bottom of the screen.",
       "Tap items more than once to add more, or tap × on any item to remove it.",
@@ -30,47 +30,46 @@ const steps = [
     details: [
       "Browse the restaurant's full digital menu inside the app.",
       "Tap + to add any item — your running total updates instantly.",
-      "Order everything in one go for the best chance at a top-tier refund.",
+      "Order everything in one go for the best chance at a top-tier discount.",
       "No need to flag down a waiter — your order goes straight to the kitchen.",
     ],
   },
   {
     num: 3,
     icon: CreditCard,
-    title: "Pay the full price upfront",
+    title: "Start the timer",
     color: "bg-green-600",
     details: [
-      "When your order is complete, tap 'Pay & start timer' at the bottom of the screen.",
-      "DineDash charges the FULL price of your order to your card, Apple Pay, or Google Pay.",
-      "Payments are processed securely by Stripe — your card details never touch DineDash's servers.",
-      "Your speed timer starts the moment payment confirms — no staff action needed.",
-      "If you change your mind before paying, just back out — you're charged nothing.",
+      "When your order is complete, tap 'Start timer' at the bottom of the screen.",
+      "No payment happens yet — this just confirms your order and starts your speed clock.",
+      "Payment happens once, later, when you're ready to leave — nothing is charged now.",
+      "If you want to add more items after starting, you can — just note the clock keeps running.",
     ],
   },
   {
     num: 4,
     icon: Timer,
-    title: "Beat the timer",
+    title: "Eat fast",
     color: "bg-green-600",
     details: [
-      "Once you've paid, a big pulsing timer appears on the Session screen.",
+      "A big pulsing timer appears on the Session screen the moment you start.",
       "The timer changes colour as you cross each tier — green for the top tier, amber, then red.",
       "Encouraging milestones pop up at 15, 30, and 45 minutes — no pressure, just cheers.",
-      "The percentage shown next to the timer is your CURRENT refund — it's locked in if you go to the till right now.",
+      "The percentage shown next to the timer is your CURRENT discount — it's locked in the moment you pay.",
       "You can leave the app and come back at any time — the timer keeps running on the server.",
     ],
   },
   {
     num: 5,
     icon: Award,
-    title: "Scan the till QR to get your refund",
+    title: "Pay & get your discount",
     color: "bg-green-600",
     details: [
-      "When you're ready to leave, tap 'Scan till QR to claim refund' on the Session screen.",
+      "When you're ready to leave, tap 'Scan till QR to pay' on the Session screen.",
       "Walk to the restaurant's till and scan the till's QR code with your phone.",
-      "DineDash works out your refund based on how long you took, then sends the money back to the card you paid with.",
-      "Refunds usually appear on your card within 5 business days, depending on your bank.",
-      "IMPORTANT: if you walk out without scanning the till QR, no refund is issued — you keep paying full price.",
+      "DineDash works out your discount based on how long you took, then charges your card via Stripe for the discounted total — or pay cash at the till.",
+      "Card payments are processed securely by Stripe — your card details never touch DineDash's servers.",
+      "IMPORTANT: your order isn't paid until you scan the till QR — the timer doesn't pay your bill for you.",
     ],
   },
 ];
@@ -81,71 +80,71 @@ const accordionSections = [
     title: "What is DineDash?",
     color: "bg-green-600",
     content: [
-      "DineDash rewards you for eating quickly — the faster you finish, the bigger your refund.",
-      "Finish in under 15 minutes for a 30% refund.",
-      "Finish in under 30 minutes for a 20% refund.",
-      "Finish in under 45 minutes for a 10% refund.",
-      "If you take longer than 45 minutes, no refund is issued — you simply pay full price.",
-      "Every restaurant can tweak its own time limits and refund percentages, so check the restaurant's screen for the exact tiers.",
+      "DineDash rewards you for eating quickly — the faster you finish, the bigger your discount.",
+      "Finish in under 15 minutes for 30% off.",
+      "Finish in under 30 minutes for 20% off.",
+      "Finish in under 45 minutes for 10% off.",
+      "If you take longer than 45 minutes, no discount applies — you simply pay full price.",
+      "Every restaurant can tweak its own time limits and discount percentages, so check the restaurant's screen for the exact tiers.",
     ],
   },
   {
     icon: Lock,
-    title: "No signup required",
+    title: "Quick sign-in",
     color: "bg-green-600",
     content: [
-      "There's no account, no email, no password — your phone is your ticket.",
-      "DineDash creates an anonymous device ID the first time you open the app and stores it locally.",
-      "We never ask for your name, phone number, or email.",
-      "If you delete the app, your anonymous ID is gone — there's nothing to log in to next time.",
+      "Sign in once with your phone number, email, or Apple/Google account — it takes seconds.",
+      "Your details are saved, so you won't need to sign in again on that device.",
+      "No loyalty cards, no points — just a simple account that remembers you.",
+      "Signing in also means your order history is there next time you visit.",
     ],
   },
   {
     icon: Shield,
-    title: "Paying upfront",
+    title: "How payment works",
     color: "bg-amber-500",
     content: [
-      "When your order is complete, tap 'Pay & start timer' at the bottom of the screen.",
-      "DineDash charges the FULL price of your order to your card, Apple Pay, or Google Pay.",
-      "Payments are processed securely by Stripe — your card details never touch DineDash's servers.",
-      "Your speed timer starts the moment payment confirms — no staff action needed.",
-      "If you change your mind before paying, just back out — you're charged nothing.",
+      "Starting your order and starting the timer doesn't charge you anything.",
+      "Payment happens once, at the end — tap 'Scan till QR to pay' when you're ready to leave.",
+      "DineDash calculates your discount and charges your card via Stripe for the discounted total — or you can pay cash at the till instead.",
+      "Card payments are processed securely by Stripe — your card details never touch DineDash's servers.",
+      "There's no separate refund step — the discount is already taken off before you pay.",
     ],
   },
   {
     icon: Timer,
-    title: "Beating the timer",
+    title: "Eating fast",
     color: "bg-green-600",
     content: [
-      "Once you've paid, a big pulsing timer appears on the Session screen.",
+      "A big pulsing timer appears on the Session screen the moment you start.",
       "The timer changes colour as you cross each tier — green for the top tier, amber, then red.",
       "Encouraging milestones pop up at 15, 30, and 45 minutes — no pressure, just cheers.",
-      "The percentage shown next to the timer is your CURRENT refund — it's locked in if you go to the till right now.",
+      "The percentage shown next to the timer is your CURRENT discount — it's locked in the moment you pay.",
       "You can leave the app and come back at any time — the timer keeps running on the server.",
     ],
   },
   {
     icon: Award,
-    title: "Claiming your refund",
+    title: "Paying at the till",
     color: "bg-green-600",
     content: [
-      "When you're ready to leave, tap 'Scan till QR to claim refund' on the Session screen.",
+      "When you're ready to leave, tap 'Scan till QR to pay' on the Session screen.",
       "Walk to the restaurant's till and scan the till's QR code with your phone.",
-      "DineDash works out your refund based on how long you took, then sends the money back to the card you paid with.",
-      "Refunds usually appear on your card within 5 business days, depending on your bank.",
-      "IMPORTANT: if you walk out without scanning the till QR, no refund is issued — you keep paying full price.",
+      "DineDash works out your discount based on how long you took, then charges your card for the discounted total.",
+      "There's nothing to claim afterwards — the discount is already applied before you pay.",
+      "IMPORTANT: if you don't scan the till QR, your order isn't paid — the timer alone doesn't settle your bill.",
     ],
   },
   {
     icon: Lightbulb,
-    title: "Tips for the biggest refund",
+    title: "Tips for the biggest discount",
     color: "bg-amber-500",
     content: [
-      "Decide what you want before scanning the QR — every second after payment counts.",
+      "Decide what you want before scanning the QR — every second after starting counts.",
       "Order everything in one go — adding items mid-meal slows you down.",
       "Have your phone ready when you finish so you can scan the till QR immediately.",
-      "Set Apple Pay or Google Pay as your default before your first visit — it makes payment instant.",
-      "Got time to spare? Even the slowest tier still saves you money — finishing under 45 minutes still earns 10% back.",
+      "Add your card in the app before your first visit — it makes checkout instant. Paying cash works too.",
+      "Got time to spare? Even the slowest tier still saves you money — finishing under 45 minutes still gets 10% off.",
     ],
   },
   {
@@ -153,20 +152,20 @@ const accordionSections = [
     title: "For restaurant owners",
     color: "bg-green-600",
     content: [
-      "Diners use DineDash anonymously and for free — only restaurants need an account.",
+      "Diners sign in and use DineDash for free — only restaurants pay a subscription.",
       "Tap Profile, then 'Owner Sign In' to create or sign into your owner account.",
       "From the dashboard you can manage your restaurant, menu, tables, and live sessions.",
       "Print the table QR codes from the QR Codes screen and place them on each table.",
-      "Print the till QR code and display it at your payment counter — diners need it to claim refunds.",
+      "Print the till QR code and display it at your payment counter — diners need it to pay with their discount applied.",
     ],
   },
 ];
 
 const fallbackTierStyles = [
-  { color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-500/10 border-green-300 dark:border-green-500/30", desc: "Highest refund — eat efficiently" },
-  { color: "text-amber-500 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-500/10 border-amber-300 dark:border-amber-500/30", desc: "Great refund — comfortable pace" },
-  { color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-500/10 border-amber-400 dark:border-amber-500/30", desc: "Good refund — relaxed dining" },
-  { color: "text-stone-400 dark:text-slate-500", bg: "bg-stone-50 dark:bg-slate-700/20 border-stone-200 dark:border-slate-600/30", desc: "No refund — full price only" },
+  { color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-500/10 border-green-300 dark:border-green-500/30", desc: "Biggest discount — eat efficiently" },
+  { color: "text-amber-500 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-500/10 border-amber-300 dark:border-amber-500/30", desc: "Great discount — comfortable pace" },
+  { color: "text-amber-600 dark:text-amber-400", bg: "bg-amber-50 dark:bg-amber-500/10 border-amber-400 dark:border-amber-500/30", desc: "Good discount — relaxed dining" },
+  { color: "text-stone-400 dark:text-slate-500", bg: "bg-stone-50 dark:bg-slate-700/20 border-stone-200 dark:border-slate-600/30", desc: "No discount — full price only" },
 ];
 
 const fallbackDiscountTiers = [
@@ -245,7 +244,7 @@ export default function HowItWorksClient() {
             <span className="text-[var(--brand)]">works</span>
           </h1>
           <p className="text-xl text-white/60 max-w-2xl mx-auto mb-8">
-            Pay first. Eat fast. Get money back. Here's everything you need to know about the DineDash dining experience.
+            Order first. Eat fast. Pay less. Here's everything you need to know about the DineDash dining experience.
           </p>
           {/* Mini tiers */}
           <div className="flex flex-wrap justify-center gap-3">
@@ -266,9 +265,9 @@ export default function HowItWorksClient() {
             <div className="inline-flex items-center gap-2 bg-[var(--brand-light)] text-[var(--brand)] font-semibold px-4 py-2 rounded-full text-sm mb-4">
               <Zap className="w-4 h-4 fill-[var(--brand)] text-[var(--brand)]" /> The core idea
             </div>
-            <h2 className="text-3xl font-extrabold text-[var(--text-primary)] mb-3">Pay first. Eat fast. Get money back.</h2>
+            <h2 className="text-3xl font-extrabold text-[var(--text-primary)] mb-3">Order first. Eat fast. Pay less.</h2>
             <p className="text-[var(--text-secondary)] max-w-xl mx-auto">
-              Scan your table QR, order, pay the full price upfront, then beat the timer for an automatic refund of your speed discount — straight back to your card.
+              Scan your table QR, order, and start the timer. Eat fast — the quicker you finish, the bigger the discount applied automatically when you pay at the end.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
@@ -351,7 +350,7 @@ export default function HowItWorksClient() {
       <section className="section-padding px-4 bg-green-600 text-white">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4">Ready to try it?</h2>
-          <p className="text-green-100 text-lg mb-8">Download DineDash and earn your first refund today. No signup needed.</p>
+          <p className="text-green-100 text-lg mb-8">Download DineDash and earn your first discount today. Quick sign-in, that's it.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/get-started" className="bg-white text-green-700 font-bold px-8 py-3.5 rounded-full hover:bg-green-50 transition-colors inline-flex items-center gap-2">
               Restaurant owner? Start here <ArrowRight className="w-5 h-5" />

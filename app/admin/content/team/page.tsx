@@ -59,7 +59,7 @@ export default function TeamPage() {
   }
 
   return (
-    <div className="space-y-5 max-w-3xl">
+    <div className="space-y-5 max-w-3xl mx-auto">
       <div className="flex items-center justify-between">
         <p className="text-sm text-[var(--text-muted)]">Manage team members shown on the About page.</p>
         <div className="flex gap-3">

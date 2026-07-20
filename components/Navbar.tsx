@@ -146,7 +146,13 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {isOpen && (
-        <div className="lg:hidden bg-[var(--surface)] border-t border-[var(--border)] shadow-lg">
+        <div
+          className="lg:hidden fixed inset-0 top-[72px] bg-black/40 z-40"
+          onClick={() => setIsOpen(false)}
+        />
+      )}
+      {isOpen && (
+        <div className="lg:hidden fixed inset-x-0 top-[72px] bottom-0 z-40 bg-[var(--surface)] border-t border-[var(--border)] shadow-lg overflow-y-auto">
           <div className="max-w-7xl mx-auto px-4 py-4 space-y-1">
             {navItems.map((item) => (
               <div key={item.label}>

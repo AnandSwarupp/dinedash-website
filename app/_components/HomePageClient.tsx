@@ -5,8 +5,9 @@ import { useState, useEffect } from "react";
 import {
   QrCode, Timer, CreditCard, Zap, ArrowRight, Check,
   ChevronDown, Star, TrendingUp, Users, Clock, Shield,
-  Smartphone, ChefHat, BarChart3
+  Smartphone, ChefHat, BarChart3, Banknote, Lock
 } from "lucide-react";
+import { FaApple, FaGooglePlay } from "react-icons/fa";
 
 const tierStyles = [
   { color: "text-green-600 dark:text-green-400", bg: "bg-green-50 dark:bg-green-500/10 border-green-200 dark:border-green-500/30" },
@@ -25,15 +26,15 @@ const fallbackTiers = [
 const steps = [
   { num: 1, icon: QrCode, title: "Scan the table QR", desc: "Open DineDash and point your camera at the QR code on your table. Your dining session opens instantly.", color: "bg-green-600" },
   { num: 2, icon: ChefHat, title: "Add items to your order", desc: "Browse the restaurant's digital menu and tap + to build your order. Everything in one go.", color: "bg-amber-500" },
-  { num: 3, icon: CreditCard, title: "Pay the full price upfront", desc: "Tap 'Pay & start timer'. Pay securely via card, Apple Pay, or Google Pay through Stripe.", color: "bg-green-600" },
-  { num: 4, icon: Timer, title: "Beat the timer", desc: "A live pulsing timer shows your current refund percentage. It runs server-side — safe to leave the app.", color: "bg-green-600" },
-  { num: 5, icon: Zap, title: "Scan the till QR & get refunded", desc: "Walk to the till, scan the QR, and your refund is sent straight back to your card. Done.", color: "bg-green-600" },
+  { num: 3, icon: CreditCard, title: "Start the timer", desc: "Tap 'Start timer' to confirm your order. No payment yet — the clock just starts counting.", color: "bg-green-600" },
+  { num: 4, icon: Timer, title: "Eat fast", desc: "A live pulsing timer shows your current discount. It runs server-side — safe to leave the app.", color: "bg-green-600" },
+  { num: 5, icon: Zap, title: "Pay & get your discount", desc: "Scan the till QR to pay. Your discount is applied automatically — pay less, right there.", color: "bg-green-600" },
 ];
 
 const stats = [
-  { value: "30%", label: "Max refund for fastest diners", icon: TrendingUp },
-  { value: "5 steps", label: "All it takes to earn a refund", icon: Zap },
-  { value: "0", label: "Signup required for customers", icon: Users },
+  { value: "30%", label: "Max discount for fastest diners", icon: TrendingUp },
+  { value: "5 steps", label: "All it takes to earn your discount", icon: Zap },
+  { value: "Free", label: "Sign-in for customers, always", icon: Users },
   { value: "Stripe", label: "Payments — bank-level security", icon: Shield },
 ];
 
@@ -41,20 +42,20 @@ const restaurantBenefits = [
   { icon: TrendingUp, title: "More covers per day", desc: "Faster table turnover means more revenue without expanding your space." },
   { icon: BarChart3, title: "Zero friction setup", desc: "Print QR codes, place them on tables. No hardware, no training, no staff app." },
   { icon: Smartphone, title: "Real-time dashboard", desc: "See live sessions, track table status, and manage your menu from anywhere." },
-  { icon: Clock, title: "No-show protection", desc: "Upfront payment eliminates walkouts. Every seated diner has already paid." },
+  { icon: Clock, title: "Faster checkout", desc: "Diners pay in one scan at the till — no card machines, no waiting on staff for the bill." },
 ];
 
 const fallbackTestimonials = [
   { name: "Sarah M.", role: "Restaurant Owner, London", quote: "Since we started with DineDash, our average table time dropped by 18 minutes. We're fitting in an extra turn during dinner service every night.", rating: 5, avatar: "S", color: "bg-green-600" },
-  { name: "James K.", role: "Customer", quote: "Got 30% back on a £60 dinner because we finished quickly. The app is dead simple — scan, order, pay, eat, scan again. That's it.", rating: 5, avatar: "J", color: "bg-green-600" },
+  { name: "James K.", role: "Customer", quote: "Got 30% off a £60 dinner because we finished quickly. The app is dead simple — scan, order, eat fast, pay less. That's it.", rating: 5, avatar: "J", color: "bg-green-600" },
   { name: "Priya R.", role: "Restaurant Manager, Manchester", quote: "Setup took under an hour. We printed the QR codes, tested it ourselves, and went live. Our customers love the gamification of it.", rating: 5, avatar: "P", color: "bg-amber-500" },
 ];
 
 const fallbackFaqs = [
-  { q: "Do customers need to create an account?", a: "No. DineDash creates an anonymous device ID the first time the app opens and stores it locally. We never ask for a name, email, or phone number. Your phone is your ticket." },
-  { q: "What if a customer takes longer than 45 minutes?", a: "They simply pay the full price — no penalty, no extra charges. The full amount was already collected upfront, so there's nothing more to do. The restaurant is always protected." },
-  { q: "How quickly do refunds appear?", a: "Refunds are processed via Stripe and typically appear on the customer's card within 3–5 business days, depending on their bank." },
-  { q: "Can restaurants customise their own time limits and discount percentages?", a: "Yes. Every restaurant can set their own time tiers and refund percentages from the owner dashboard. The app always shows the current restaurant's exact tiers." },
+  { q: "Do customers need to create an account?", a: "Yes — a quick one-time sign-in with your phone, email, or Apple/Google account. It takes seconds and your details are saved for next time." },
+  { q: "What if a customer takes longer than 45 minutes?", a: "They simply pay full price at checkout — no discount applies, but no penalty either. It's exactly what they'd pay without DineDash." },
+  { q: "How is the discount applied?", a: "The moment a customer scans the till QR to pay, DineDash calculates their discount based on how long they took and deducts it from the bill instantly — before the card is charged. Nothing to claim afterwards." },
+  { q: "Can restaurants customise their own time limits and discount percentages?", a: "Yes. Every restaurant can set their own time tiers and discount percentages from the owner dashboard. The app always shows the current restaurant's exact tiers." },
   { q: "Do waitstaff need to use an app?", a: "No dedicated staff app is needed. Waitstaff simply point customers to the table QR code. The entire flow is customer-driven through their own phone." },
   { q: "How does a restaurant get started?", a: "Sign up for a subscription, add your restaurant details and menu, then print your unique table QR codes and till QR code. You can be live in under an hour." },
 ];
@@ -142,13 +143,13 @@ export default function HomePageClient() {
                 Speed rewards — automatically
               </div>
               <h1 className="text-5xl md:text-6xl font-extrabold text-[var(--text-primary)] leading-tight mb-6">
-                Pay first.{" "}
+                Order first.{" "}
                 <span className="gradient-text">Eat fast.</span>
                 <br />
-                Get money back.
+                Pay less.
               </h1>
               <p className="text-xl text-[var(--text-secondary)] leading-relaxed mb-8 max-w-lg">
-                Scan your table QR, order, pay the full price upfront, then beat the timer for an automatic refund — straight back to your card.
+                Scan your table QR, order, and start the timer. Eat fast — the quicker you finish, the bigger the discount applied automatically when you pay.
               </p>
               <div className="flex flex-wrap gap-3 mb-10">
                 {discountTiers.map((t) => (
@@ -167,17 +168,17 @@ export default function HomePageClient() {
                 </Link>
               </div>
               <div className="mt-8 flex flex-wrap items-center gap-6 text-sm text-[var(--text-muted)]">
-                <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-[var(--brand)]" /> No signup for diners</span>
+                <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-[var(--brand)]" /> Quick sign-in for diners</span>
                 <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-[var(--brand)]" /> Powered by Stripe</span>
                 <span className="flex items-center gap-1.5"><Check className="w-4 h-4 text-[var(--brand)]" /> Live in &lt; 1 hour</span>
               </div>
             </div>
 
             {/* Phone mockup */}
-            <div className="flex justify-center lg:justify-end">
-              <div className="relative px-16">
-                <div className="absolute -left-4 top-16 bg-[var(--surface)] rounded-2xl shadow-xl border border-[var(--border)] px-5 py-4 z-10">
-                  <div className="text-xs text-[var(--text-muted)] font-medium">Your refund</div>
+            <div className="flex justify-center lg:justify-end lg:pr-14">
+              <div className="relative px-4 sm:px-16">
+                <div className="hidden sm:block absolute -left-4 top-16 bg-[var(--surface)] rounded-2xl shadow-xl border border-[var(--border)] px-5 py-4 z-10">
+                  <div className="text-xs text-[var(--text-muted)] font-medium">Your discount</div>
                   <div className="text-3xl font-extrabold text-[var(--brand)] mt-1">30%</div>
                   <div className="text-xs text-[var(--text-muted)] mt-0.5">12m 34s remaining</div>
                 </div>
@@ -196,7 +197,7 @@ export default function HomePageClient() {
                         <div className="absolute inset-2 rounded-full border-4 border-green-500 border-t-transparent animate-spin" style={{animationDuration: '3s'}} />
                         <div className="text-center">
                           <div className="text-green-400 text-3xl font-extrabold">30%</div>
-                          <div className="text-white/60 text-xs">refund now</div>
+                          <div className="text-white/60 text-xs">discount now</div>
                         </div>
                       </div>
                       <div className="text-white/80 text-2xl font-mono font-bold mt-4">12:34</div>
@@ -211,14 +212,14 @@ export default function HomePageClient() {
                       ))}
                     </div>
                     <button className="w-full bg-green-500 text-white font-bold py-3.5 rounded-2xl text-sm">
-                      Scan Till QR to Claim Refund
+                      Scan Till QR to Pay
                     </button>
                   </div>
                 </div>
-                <div className="absolute -right-14 top-[52%] bg-[var(--surface)] rounded-2xl shadow-xl border border-[var(--border)] px-5 py-4">
+                <div className="hidden sm:block absolute -right-14 top-[52%] bg-[var(--surface)] rounded-2xl shadow-xl border border-[var(--border)] px-5 py-4">
                   <div className="text-xs text-[var(--text-muted)] font-medium">Stripe secure</div>
-                  <div className="text-sm font-bold text-[var(--text-primary)] mt-1">💳 £18.00 refunded</div>
-                  <div className="text-xs text-[var(--text-muted)] mt-0.5">3–5 business days</div>
+                  <div className="text-sm font-bold text-[var(--text-primary)] mt-1">💳 £18.00 saved</div>
+                  <div className="text-xs text-[var(--text-muted)] mt-0.5">Charged instantly</div>
                 </div>
               </div>
             </div>
@@ -249,7 +250,7 @@ export default function HomePageClient() {
               How <span className="gradient-text">DineDash</span> works
             </h2>
             <p className="text-xl text-[var(--text-muted)] max-w-2xl mx-auto">
-              From sitting down to getting your refund — the entire experience takes just five steps.
+              From sitting down to paying less — the entire experience takes just five steps.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8">
@@ -280,17 +281,17 @@ export default function HomePageClient() {
           <div className="grid lg:grid-cols-2 gap-14 items-center">
             <div>
               <div className="inline-flex items-center gap-2 bg-[var(--brand-light)] text-[var(--brand)] text-sm font-semibold px-4 py-2 rounded-full mb-6">
-                <Zap className="w-4 h-4" /> Refund tiers
+                <Zap className="w-4 h-4" /> Discount tiers
               </div>
               <h2 className="text-4xl md:text-5xl font-extrabold text-[var(--text-primary)] mb-6">
                 The faster you eat,<br />
                 <span className="gradient-text-green">the more you save</span>
               </h2>
               <p className="text-lg text-[var(--text-secondary)] mb-8">
-                Every restaurant can customise their own time limits and refund percentages. The tiers shown are standard defaults — check your restaurant's screen for their exact breakdown.
+                Every restaurant can customise their own time limits and discount percentages. The tiers shown are standard defaults — check your restaurant's screen for their exact breakdown.
               </p>
               <ul className="space-y-3 text-[var(--text-secondary)]">
-                {["No signup, no loyalty cards — just eat and earn","Timer runs server-side — safe to lock your phone","Refunds go straight to the card you paid with","Walk out without scanning? You simply pay full price"].map((point) => (
+                {["Quick sign-in, no loyalty cards — just eat and save","Timer runs server-side — safe to lock your phone","Your discount is applied automatically when you pay","Scan the till QR when you're ready to pay and go"].map((point) => (
                   <li key={point} className="flex items-start gap-3">
                     <Check className="w-5 h-5 text-[var(--brand)] flex-shrink-0 mt-0.5" />
                     <span>{point}</span>
@@ -303,7 +304,7 @@ export default function HomePageClient() {
                 <div key={t.discount} className={`border-2 rounded-2xl p-6 text-center card-hover ${t.bg}`}>
                   <div className={`text-5xl font-extrabold mb-2 ${t.color}`}>{t.discount}</div>
                   <div className="text-[var(--text-secondary)] font-medium">{t.time}</div>
-                  <div className="text-[var(--text-muted)] text-xs mt-2">refund tier</div>
+                  <div className="text-[var(--text-muted)] text-xs mt-2">discount tier</div>
                 </div>
               ))}
             </div>
@@ -400,7 +401,7 @@ export default function HomePageClient() {
                   All payments are processed securely by Stripe — the same technology trusted by Shopify, Amazon, and millions of businesses worldwide.
                 </p>
                 <ul className="space-y-3">
-                  {["Card, Apple Pay & Google Pay supported","PCI-DSS compliant via Stripe","Automatic refunds — no manual claims","Change your mind before paying? You owe nothing"].map((point) => (
+                  {["Card via Stripe, or pay cash at the till","PCI-DSS compliant via Stripe","Discount applied automatically — no manual claims","You only pay once, at the end — nothing charged upfront"].map((point) => (
                     <li key={point} className="flex items-center gap-3 text-[var(--text-secondary)] text-sm">
                       <div className="w-5 h-5 bg-[var(--brand-light)] rounded-full flex items-center justify-center flex-shrink-0">
                         <Check className="w-3 h-3 text-[var(--brand)]" />
@@ -411,9 +412,16 @@ export default function HomePageClient() {
                 </ul>
               </div>
               <div className="grid grid-cols-2 gap-4">
-                {[{icon:"💳",label:"Credit & Debit Cards",sub:"Visa, Mastercard, Amex"},{icon:"🍎",label:"Apple Pay",sub:"One-tap checkout"},{icon:"🟢",label:"Google Pay",sub:"Instant payment"},{icon:"🔒",label:"Stripe Security",sub:"Bank-level encryption"}].map((p) => (
+                {[
+                  { icon: CreditCard, label: "Card Payments", sub: "Visa, Mastercard, Amex via Stripe" },
+                  { icon: Banknote, label: "Cash", sub: "Pay at the till, the classic way" },
+                  { icon: Shield, label: "Stripe Security", sub: "Bank-level encryption" },
+                  { icon: Lock, label: "PCI-DSS Compliant", sub: "Certified secure payments" },
+                ].map((p) => (
                   <div key={p.label} className="bg-[var(--surface-alt)] border border-[var(--border)] rounded-2xl p-5 text-center">
-                    <div className="text-3xl mb-2">{p.icon}</div>
+                    <div className="w-10 h-10 rounded-xl bg-[var(--brand-light)] flex items-center justify-center mx-auto mb-3">
+                      <p.icon className="w-5 h-5 text-[var(--brand)]" />
+                    </div>
                     <div className="font-semibold text-[var(--text-primary)] text-sm">{p.label}</div>
                     <div className="text-[var(--text-muted)] text-xs mt-1">{p.sub}</div>
                   </div>
@@ -452,18 +460,18 @@ export default function HomePageClient() {
           </div>
           <h2 className="text-4xl md:text-5xl font-extrabold mb-4">Ready to start saving?</h2>
           <p className="text-xl text-green-100 mb-10 max-w-xl mx-auto">
-            Download DineDash, walk into any participating restaurant, and start earning refunds today. No signup required.
+            Download DineDash, walk into any participating restaurant, and start paying less for eating fast. Quick sign-in, that's it.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <div className="bg-white/15 hover:bg-white/25 border-2 border-white/30 rounded-2xl px-8 py-4 flex items-center gap-4 cursor-pointer transition-colors">
-              <span className="text-3xl">🍎</span>
+              <FaApple className="w-8 h-8 text-white flex-shrink-0" />
               <div className="text-left">
                 <div className="text-white/70 text-xs">Download on the</div>
                 <div className="text-white font-bold text-lg">App Store</div>
               </div>
             </div>
             <div className="bg-white/15 hover:bg-white/25 border-2 border-white/30 rounded-2xl px-8 py-4 flex items-center gap-4 cursor-pointer transition-colors">
-              <span className="text-3xl">▶️</span>
+              <FaGooglePlay className="w-7 h-7 text-white flex-shrink-0" />
               <div className="text-left">
                 <div className="text-white/70 text-xs">Get it on</div>
                 <div className="text-white font-bold text-lg">Google Play</div>

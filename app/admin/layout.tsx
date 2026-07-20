@@ -6,7 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import {
   Zap, LayoutDashboard, Users, Mail, Tag, Timer,
   HelpCircle, Star, UserCheck, Settings, LogOut, Menu, X, ChevronDown,
-  Newspaper, ShieldCheck
+  Newspaper, ShieldCheck, Package, Lightbulb
 } from "lucide-react";
 import ThemeToggle from "@/components/ThemeToggle";
 
@@ -15,6 +15,8 @@ const navItems = [
   { label: "Leads", href: "/admin/leads", icon: Users },
   { label: "Contacts", href: "/admin/contacts", icon: Mail },
   { label: "Blog", href: "/admin/blogs", icon: Newspaper },
+  { label: "Business Supplies", href: "/admin/supplies", icon: Package },
+  { label: "Suggestions", href: "/admin/suggestions", icon: Lightbulb },
   {
     label: "Content", icon: Tag, children: [
       { label: "Pricing Plans", href: "/admin/content/pricing", icon: Tag },
@@ -192,6 +194,8 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             {pathname === "/admin/leads" && "Restaurant Leads"}
             {pathname === "/admin/contacts" && "Contact Messages"}
             {pathname === "/admin/blogs" && "Blog Posts"}
+            {pathname === "/admin/supplies" && "Business Supplies"}
+            {pathname === "/admin/suggestions" && "Suggestions"}
             {pathname === "/admin/blogs/new" && "New Post"}
             {pathname.startsWith("/admin/blogs/") && pathname !== "/admin/blogs/new" && "Edit Post"}
             {pathname === "/admin/content/pricing" && "Pricing Plans"}

@@ -16,8 +16,8 @@ interface SiteSettings { siteName?: string; metaDescription?: string; tagline?: 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getContent<SiteSettings>("settings");
   const siteName = s?.siteName || "DineDash";
-  const description = s?.metaDescription || "DineDash rewards diners for eating quickly with automatic refunds up to 30%. Restaurants get faster table turnover with zero extra staff. Powered by Stripe.";
-  const title = `${siteName} — Pay First. Eat Fast. Get Money Back.`;
+  const description = s?.metaDescription || "DineDash rewards diners for eating quickly with an automatic discount of up to 30% applied when they pay. Restaurants get faster table turnover with zero extra staff. Powered by Stripe.";
+  const title = `${siteName} — Order First. Eat Fast. Pay Less.`;
   return {
     metadataBase: new URL("https://dinedash.app"),
     title: {
@@ -29,7 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
     alternates: { canonical: "/" },
     openGraph: {
       title,
-      description: "Finish in under 15 minutes and get 30% back. Automatically.",
+      description: "Finish in under 15 minutes and pay 30% less. Automatically.",
       siteName,
       type: "website",
       url: "https://dinedash.app",
@@ -37,7 +37,7 @@ export async function generateMetadata(): Promise<Metadata> {
     twitter: {
       card: "summary_large_image",
       title,
-      description: "Finish in under 15 minutes and get 30% back. Automatically.",
+      description: "Finish in under 15 minutes and pay 30% less. Automatically.",
     },
   };
 }
@@ -49,7 +49,7 @@ const organizationJsonLd = {
   url: "https://dinedash.app",
   logo: "https://dinedash.app/favicon.ico",
   description:
-    "DineDash rewards diners for eating quickly with automatic refunds up to 30%. Restaurants get faster table turnover with zero extra staff.",
+    "DineDash rewards diners for eating quickly with an automatic discount of up to 30% applied when they pay. Restaurants get faster table turnover with zero extra staff.",
   sameAs: [],
 };
 
