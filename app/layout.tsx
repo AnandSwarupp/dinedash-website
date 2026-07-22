@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
+import SmoothScrollProvider from "@/components/SmoothScrollProvider";
 import MarketingLayout from "@/components/MarketingLayout";
 import { getContent } from "@/lib/getContent";
 
@@ -66,7 +67,9 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         <ThemeProvider>
-          <MarketingLayout>{children}</MarketingLayout>
+          <SmoothScrollProvider>
+            <MarketingLayout>{children}</MarketingLayout>
+          </SmoothScrollProvider>
         </ThemeProvider>
       </body>
     </html>
