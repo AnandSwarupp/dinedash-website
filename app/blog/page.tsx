@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Clock, ArrowRight, Tag } from "lucide-react";
+import { Reveal, RevealStagger, RevealItem } from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -133,25 +134,24 @@ export default async function BlogPage() {
           <div className="absolute -top-40 -right-40 w-[600px] h-[600px] bg-[var(--brand-light)] rounded-full opacity-30 blur-3xl" />
           <div className="absolute top-60 -left-40 w-[400px] h-[400px] bg-blue-100 dark:bg-blue-900/20 rounded-full opacity-20 blur-3xl" />
         </div>
-        <div className="relative max-w-5xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-[var(--brand-light)] text-[var(--brand-text)] text-xs font-bold px-4 py-2 rounded-full mb-6 uppercase tracking-wider">
-            DineDash Journal
-          </div>
-          <h1 className="text-4xl md:text-6xl font-extrabold text-[var(--text-primary)] mb-5 leading-[1.1] tracking-tight">
+        <Reveal className="relative max-w-5xl mx-auto text-center">
+          <div className="eyebrow justify-center mb-6">DineDash Journal</div>
+          <h1 className="headline-xl text-[var(--text-primary)] mb-5">
             Insights for the <br className="hidden md:block" />
             <span className="gradient-text">modern restaurateur</span>
           </h1>
-          <p className="text-[var(--text-secondary)] text-lg leading-relaxed max-w-2xl mx-auto">
+          <p className="body-lead max-w-2xl mx-auto">
             Practical guides, case studies, and ideas on table turnover, customer loyalty, and building a more profitable dining room.
           </p>
-        </div>
+        </Reveal>
       </section>
 
       <section className="max-w-5xl mx-auto px-4 pb-24 space-y-16">
         {/* Featured post */}
         {featured && (
+          <Reveal>
           <Link href={`/blog/${featured.slug}`} className="group block">
-            <div className="relative rounded-3xl overflow-hidden border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--brand)] transition-all duration-300 shadow-[var(--card-shadow)] hover:shadow-[0_8px_40px_rgba(0,0,0,0.12)]">
+            <div className="relative rounded-3xl overflow-hidden border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--brand)]/40 transition-all duration-500 shadow-[var(--card-shadow)] hover:shadow-[0_20px_60px_-15px_rgba(0,0,0,0.15)] hover:-translate-y-1">
               {featured.coverImage && (
                 <div className="relative h-64 md:h-80 overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -182,7 +182,7 @@ export default async function BlogPage() {
                     <span className="text-xs text-[var(--text-muted)]">{formatDate(featured.publishedAt)}</span>
                   )}
                 </div>
-                <h2 className="text-2xl md:text-3xl font-extrabold text-[var(--text-primary)] mb-3 leading-tight group-hover:text-[var(--brand)] transition-colors">
+                <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-[var(--text-primary)] mb-3 leading-tight group-hover:text-[var(--brand-text)] transition-colors">
                   {featured.title}
                 </h2>
                 <p className="text-[var(--text-secondary)] leading-relaxed mb-5 line-clamp-3">{featured.excerpt}</p>
@@ -198,23 +198,25 @@ export default async function BlogPage() {
                       )}
                     </div>
                   </div>
-                  <span className="flex items-center gap-1.5 text-sm font-semibold text-[var(--brand)] group-hover:gap-2.5 transition-all">
+                  <span className="flex items-center gap-1.5 text-sm font-semibold text-[var(--brand-text)] group-hover:gap-2.5 transition-all duration-300">
                     Read article <ArrowRight className="w-4 h-4" />
                   </span>
                 </div>
               </div>
             </div>
           </Link>
+          </Reveal>
         )}
 
         {/* Grid of remaining posts */}
         {rest.length > 0 && (
           <div>
-            <h2 className="text-lg font-bold text-[var(--text-primary)] mb-6">More articles</h2>
-            <div className="grid md:grid-cols-2 gap-6">
+            <h2 className="text-lg font-semibold text-[var(--text-primary)] mb-6">More articles</h2>
+            <RevealStagger className="grid md:grid-cols-2 gap-6">
               {rest.map((post) => (
-                <Link key={post.slug} href={`/blog/${post.slug}`} className="group block">
-                  <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--brand)] transition-all duration-300 overflow-hidden shadow-[var(--card-shadow)] hover:shadow-[0_8px_32px_rgba(0,0,0,0.1)]">
+                <RevealItem key={post.slug}>
+                <Link href={`/blog/${post.slug}`} className="group block">
+                  <div className="h-full rounded-2xl border border-[var(--border)] bg-[var(--surface)] hover:border-[var(--brand)]/40 transition-all duration-500 overflow-hidden shadow-[var(--card-shadow)] hover:shadow-[0_16px_40px_-12px_rgba(0,0,0,0.12)] hover:-translate-y-1">
                     {post.coverImage && (
                       <div className="h-44 overflow-hidden">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -234,7 +236,7 @@ export default async function BlogPage() {
                           <Clock className="w-3 h-3" /> {post.readingTime} min
                         </span>
                       </div>
-                      <h3 className="font-bold text-[var(--text-primary)] leading-snug mb-2 group-hover:text-[var(--brand)] transition-colors line-clamp-2">
+                      <h3 className="font-semibold text-[var(--text-primary)] leading-snug mb-2 group-hover:text-[var(--brand-text)] transition-colors duration-300 line-clamp-2">
                         {post.title}
                       </h3>
                       <p className="text-sm text-[var(--text-secondary)] leading-relaxed line-clamp-3 mb-4">
@@ -264,8 +266,9 @@ export default async function BlogPage() {
                     </div>
                   </div>
                 </Link>
+                </RevealItem>
               ))}
-            </div>
+            </RevealStagger>
           </div>
         )}
 

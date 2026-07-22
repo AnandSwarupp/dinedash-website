@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Clock, Calendar, Tag, ArrowRight } from "lucide-react";
+import { Reveal } from "@/components/Reveal";
 
 interface BlogPost {
   slug: string;
@@ -366,12 +367,12 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-[var(--brand-light)] rounded-full opacity-25 blur-3xl" />
         </div>
-        <div className="relative max-w-3xl mx-auto">
+        <Reveal className="relative max-w-3xl mx-auto">
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--brand)] transition-colors mb-8 group"
+            className="inline-flex items-center gap-2 text-sm text-[var(--text-muted)] hover:text-[var(--brand-text)] transition-colors duration-300 mb-8 group"
           >
-            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform duration-300" />
             Back to Blog
           </Link>
 
@@ -389,14 +390,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             )}
           </div>
 
-          <h1 className="text-3xl md:text-5xl font-extrabold text-[var(--text-primary)] leading-[1.1] tracking-tight mb-5">
+          <h1 className="headline-lg text-[var(--text-primary)] mb-5">
             {post.title}
           </h1>
           <p className="text-lg text-[var(--text-secondary)] leading-relaxed mb-8">{post.excerpt}</p>
 
           {/* Author */}
           <div className="flex items-center gap-3 pb-8 border-b border-[var(--border)]">
-            <div className="w-10 h-10 rounded-full bg-[var(--brand-light)] flex items-center justify-center text-[var(--brand)] font-bold">
+            <div className="w-10 h-10 rounded-full bg-[var(--brand-light)] flex items-center justify-center text-[var(--brand-text)] font-bold">
               {post.author.charAt(0)}
             </div>
             <div>
@@ -404,17 +405,17 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               {post.authorRole && <p className="text-xs text-[var(--text-muted)]">{post.authorRole}</p>}
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* Cover image */}
       {post.coverImage && (
-        <div className="max-w-4xl mx-auto px-4 mb-12">
+        <Reveal className="max-w-4xl mx-auto px-4 mb-12">
           <div className="rounded-2xl overflow-hidden aspect-[21/9]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={post.coverImage} alt={post.title} className="w-full h-full object-cover" />
           </div>
-        </div>
+        </Reveal>
       )}
 
       {/* Content */}
@@ -437,7 +438,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
         {/* Author card */}
         <div className="mt-10 p-6 bg-[var(--surface)] border border-[var(--border)] rounded-2xl flex gap-4 items-start">
-          <div className="w-12 h-12 rounded-full bg-[var(--brand-light)] flex items-center justify-center text-[var(--brand)] font-bold text-lg flex-shrink-0">
+          <div className="w-12 h-12 rounded-full bg-[var(--brand-light)] flex items-center justify-center text-[var(--brand-text)] font-bold text-lg flex-shrink-0">
             {post.author.charAt(0)}
           </div>
           <div>
@@ -480,13 +481,13 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       )}
 
       {/* CTA */}
-      <section className="max-w-3xl mx-auto px-4 pb-20">
+      <Reveal className="max-w-3xl mx-auto px-4 pb-20">
         <div className="relative rounded-3xl overflow-hidden bg-[var(--surface)] border border-[var(--border)] p-8 text-center">
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             <div className="absolute -top-16 -right-16 w-48 h-48 bg-[var(--brand-light)] rounded-full opacity-40 blur-2xl" />
           </div>
           <div className="relative">
-            <h3 className="text-xl font-extrabold text-[var(--text-primary)] mb-2">Ready to try DineDash?</h3>
+            <h3 className="text-xl font-bold text-[var(--text-primary)] mb-2">Ready to try DineDash?</h3>
             <p className="text-sm text-[var(--text-secondary)] mb-5 max-w-sm mx-auto">
               Join restaurants turning every table faster and building loyal repeat customers automatically.
             </p>
@@ -495,7 +496,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
             </Link>
           </div>
         </div>
-      </section>
+      </Reveal>
     </div>
   );
 }

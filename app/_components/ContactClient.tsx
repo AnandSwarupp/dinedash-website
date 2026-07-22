@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Mail, Phone, MapPin, Send, Check, ArrowRight, Zap } from "lucide-react";
+import { Reveal } from "@/components/Reveal";
 
 interface Settings { email?: string; phone?: string; address?: string; }
 
@@ -66,7 +67,7 @@ export default function ContactClient() {
     }
   };
 
-  const inputClass = "w-full border border-[var(--border)] rounded-xl px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent text-sm bg-[var(--surface-alt)]";
+  const inputClass = "w-full border border-[var(--border)] rounded-xl px-4 py-3 text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--brand)] focus:border-transparent text-sm bg-[var(--surface-alt)] transition-shadow duration-300";
 
   return (
     <div className="overflow-x-hidden">
@@ -75,17 +76,15 @@ export default function ContactClient() {
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-green-100 dark:bg-green-500/5 rounded-full opacity-40 blur-3xl" />
         </div>
-        <div className="relative max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 bg-[var(--brand-light)] text-[var(--brand)] text-sm font-semibold px-4 py-2 rounded-full mb-6">
-            <Mail className="w-4 h-4" /> Get in touch
-          </div>
-          <h1 className="text-5xl font-extrabold text-[var(--text-primary)] mb-4">
+        <Reveal className="relative max-w-2xl mx-auto">
+          <div className="eyebrow justify-center mb-6">Get in touch</div>
+          <h1 className="headline-lg text-[var(--text-primary)] mb-4">
             We&apos;d love to <span className="gradient-text">hear from you</span>
           </h1>
-          <p className="text-xl text-[var(--text-secondary)]">
+          <p className="body-lead">
             Restaurant owner? Curious diner? Press enquiry? Fill in the form below — we reply within 24 hours.
           </p>
-        </div>
+        </Reveal>
       </section>
 
       {/* MAIN CONTENT */}
@@ -93,43 +92,43 @@ export default function ContactClient() {
         <div className="max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-5 gap-12">
             {/* Contact info sidebar */}
-            <div className="lg:col-span-2 space-y-6">
-              <div className="bg-[var(--surface-dark)] text-white rounded-3xl p-8">
-                <h2 className="text-xl font-bold mb-6">Contact information</h2>
+            <Reveal className="lg:col-span-2 space-y-6">
+              <div className="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 shadow-sm">
+                <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-6">Contact information</h2>
                 <div className="space-y-5">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-[var(--brand)]/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-5 h-5 text-[var(--brand)]" />
+                    <div className="icon-tile">
+                      <Mail className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="text-white/50 text-xs mb-1">Email</div>
-                      <div className="text-white font-medium">{settings.email || "hello@dinedash.app"}</div>
+                      <div className="text-[var(--text-muted)] text-xs mb-1">Email</div>
+                      <div className="text-[var(--text-primary)] font-medium">{settings.email || "hello@dinedash.app"}</div>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-[var(--brand)]/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-5 h-5 text-[var(--brand)]" />
+                    <div className="icon-tile">
+                      <Phone className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="text-white/50 text-xs mb-1">Phone</div>
-                      <div className="text-white font-medium">{settings.phone || "+44 20 0000 0000"}</div>
-                      <div className="text-white/40 text-xs mt-0.5">Mon–Fri, 9am–6pm GMT</div>
+                      <div className="text-[var(--text-muted)] text-xs mb-1">Phone</div>
+                      <div className="text-[var(--text-primary)] font-medium">{settings.phone || "+44 20 0000 0000"}</div>
+                      <div className="text-[var(--text-muted)] text-xs mt-0.5">Mon–Fri, 9am–6pm GMT</div>
                     </div>
                   </div>
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 bg-[var(--brand)]/20 rounded-xl flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-5 h-5 text-[var(--brand)]" />
+                    <div className="icon-tile">
+                      <MapPin className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="text-white/50 text-xs mb-1">Location</div>
-                      <div className="text-white font-medium">{settings.address || "London, United Kingdom"}</div>
+                      <div className="text-[var(--text-muted)] text-xs mb-1">Location</div>
+                      <div className="text-[var(--text-primary)] font-medium">{settings.address || "London, United Kingdom"}</div>
                     </div>
                   </div>
                 </div>
               </div>
 
               <div className="bg-[var(--surface-alt)] border border-[var(--border)] rounded-3xl p-8">
-                <h3 className="font-bold text-[var(--text-primary)] mb-4">Quick links</h3>
+                <h3 className="font-semibold text-[var(--text-primary)] mb-4">Quick links</h3>
                 <div className="space-y-3">
                   {[
                     { label: "Ready to get started?", href: "/get-started", desc: "Start your 30-day free trial" },
@@ -137,27 +136,27 @@ export default function ContactClient() {
                     { label: "How it works", href: "/how-it-works", desc: "Full guide for restaurants & diners" },
                   ].map((link) => (
                     <Link key={link.href} href={link.href} className="flex items-start gap-3 group">
-                      <div className="w-8 h-8 bg-[var(--brand-light)] rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-[var(--brand)] transition-colors">
-                        <ArrowRight className="w-4 h-4 text-[var(--brand)] group-hover:text-[#0F1623] transition-colors" />
+                      <div className="w-8 h-8 bg-[var(--brand-light)] rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:bg-[var(--brand)] transition-colors duration-300">
+                        <ArrowRight className="w-4 h-4 text-[var(--brand-text)] group-hover:text-[#0F1623] transition-colors duration-300" />
                       </div>
                       <div>
-                        <div className="text-[var(--text-primary)] font-semibold text-sm group-hover:text-[var(--brand)] transition-colors">{link.label}</div>
+                        <div className="text-[var(--text-primary)] font-semibold text-sm group-hover:text-[var(--brand-text)] transition-colors duration-300">{link.label}</div>
                         <div className="text-[var(--text-muted)] text-xs">{link.desc}</div>
                       </div>
                     </Link>
                   ))}
                 </div>
               </div>
-            </div>
+            </Reveal>
 
             {/* Form */}
-            <div className="lg:col-span-3">
+            <Reveal delay={0.1} className="lg:col-span-3">
               {success ? (
                 <div className="bg-[var(--brand-light)] border-2 border-[var(--brand)] rounded-3xl p-12 text-center">
                   <div className="w-16 h-16 bg-[var(--brand)] rounded-full flex items-center justify-center mx-auto mb-6">
                     <Check className="w-8 h-8 text-[#0F1623]" />
                   </div>
-                  <h2 className="text-2xl font-extrabold text-[var(--text-primary)] mb-3">Message sent!</h2>
+                  <h2 className="text-2xl font-bold text-[var(--text-primary)] mb-3">Message sent!</h2>
                   <p className="text-[var(--text-secondary)] mb-6">
                     Thanks for reaching out. We&apos;ll reply to <strong>{form.email}</strong> within 24 hours.
                   </p>
@@ -168,10 +167,10 @@ export default function ContactClient() {
               ) : (
                 <div className="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 md:p-10 shadow-sm">
                   <div className="flex items-center gap-3 mb-8">
-                    <div className="w-10 h-10 bg-[var(--brand)] rounded-xl flex items-center justify-center">
-                      <Zap className="w-5 h-5 text-[#0F1623] fill-[#0F1623]" />
+                    <div className="w-9 h-9 bg-[var(--brand)] rounded-xl flex items-center justify-center">
+                      <Zap className="w-4 h-4 text-[#0F1623] fill-[#0F1623]" />
                     </div>
-                    <h2 className="text-xl font-bold text-[var(--text-primary)]">Send us a message</h2>
+                    <h2 className="text-xl font-semibold text-[var(--text-primary)]">Send us a message</h2>
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-5">
@@ -237,7 +236,7 @@ export default function ContactClient() {
                   </form>
                 </div>
               )}
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>

@@ -1,31 +1,9 @@
-"use client";
-
-import { useEffect } from "react";
-import Lenis from "lenis";
-
+// Native browser scrolling is used site-wide instead of a JS-driven
+// smooth-scroll library (Lenis): under real trackpad/mouse wheel input
+// its virtual scroll position could desync from actual scrollTop,
+// causing scrolling to stall until several more wheel events "caught it
+// up". Native scroll can't desync like that, and pairs with
+// `scroll-behavior: smooth` in globals.css for anchor-link jumps.
 export default function SmoothScrollProvider({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
-    if (isTouchDevice) return;
-
-    const lenis = new Lenis({
-      duration: 1.1,
-      easing: (t) => 1 - Math.pow(1 - t, 3),
-      smoothWheel: true,
-    });
-
-    let rafId: number;
-    function raf(time: number) {
-      lenis.raf(time);
-      rafId = requestAnimationFrame(raf);
-    }
-    rafId = requestAnimationFrame(raf);
-
-    return () => {
-      cancelAnimationFrame(rafId);
-      lenis.destroy();
-    };
-  }, []);
-
   return <>{children}</>;
 }

@@ -8,6 +8,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
       attribute="class"
       defaultTheme="system"
       enableSystem
+      storageKey="dinedash-theme"
       disableTransitionOnChange={false}
     >
       {children}

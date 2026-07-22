@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Check, QrCode, Timer, CreditCard, Award, Lock, Zap, Smartphone, Shield } from "lucide-react";
 import { FaApple, FaGooglePlay } from "react-icons/fa";
 import { getContent } from "@/lib/getContent";
+import { Reveal, RevealStagger, RevealItem } from "@/components/Reveal";
 
 export const revalidate = 0;
 
@@ -34,17 +35,17 @@ const tierStyles = [
 ];
 
 const steps = [
-  { num: 1, icon: QrCode, title: "Scan the table QR", desc: "Open DineDash, tap Scan, and point at the QR code on your table. Your session opens automatically.", color: "bg-green-600" },
-  { num: 2, icon: CreditCard, title: "Order & start the timer", desc: "Browse the menu, add items, then tap 'Start timer'. No payment yet — just confirming your order.", color: "bg-amber-500" },
-  { num: 3, icon: Timer, title: "Watch the timer", desc: "A live timer shows your current discount. Green = 30%, amber = 20%, orange = 10%.", color: "bg-green-600" },
-  { num: 4, icon: Award, title: "Scan the till & pay", desc: "Walk to the counter, scan the till QR, and pay — your discount is already applied. Done.", color: "bg-green-600" },
+  { num: 1, icon: QrCode, title: "Scan the table QR", desc: "Open DineDash, tap Scan, and point at the QR code on your table. Your session opens automatically." },
+  { num: 2, icon: CreditCard, title: "Order & start the timer", desc: "Browse the menu, add items, then tap 'Start timer'. No payment yet — just confirming your order." },
+  { num: 3, icon: Timer, title: "Watch the timer", desc: "A live timer shows your current discount. Green = 30%, amber = 20%, orange = 10%." },
+  { num: 4, icon: Award, title: "Scan the till & pay", desc: "Walk to the counter, scan the till QR, and pay — your discount is already applied. Done." },
 ];
 
 const features = [
-  { icon: Lock, title: "Quick one-time sign-in", desc: "Sign in with your phone, email, or Apple/Google account — takes seconds and you're saved for next time.", iconBg: "bg-[var(--brand-light)]", iconColor: "text-[var(--brand)]" },
-  { icon: Shield, title: "Stripe-secured payments", desc: "Your card details never touch DineDash servers. PCI-DSS compliant, bank-level security.", iconBg: "bg-blue-100 dark:bg-blue-500/10", iconColor: "text-blue-700 dark:text-blue-400" },
-  { icon: Zap, title: "Instant discount calculation", desc: "The moment you scan the till QR, your discount is calculated and deducted before your card is charged.", iconBg: "bg-amber-100 dark:bg-amber-500/10", iconColor: "text-amber-700 dark:text-amber-400" },
-  { icon: Smartphone, title: "Leave the app anytime", desc: "The timer runs on our servers. Lock your phone, go back to the app later — it's all still there.", iconBg: "bg-[var(--brand-light)]", iconColor: "text-[var(--brand)]" },
+  { icon: Lock, title: "Quick one-time sign-in", desc: "Sign in with your phone, email, or Apple/Google account — takes seconds and you're saved for next time." },
+  { icon: Shield, title: "Stripe-secured payments", desc: "Your card details never touch DineDash servers. PCI-DSS compliant, bank-level security." },
+  { icon: Zap, title: "Instant discount calculation", desc: "The moment you scan the till QR, your discount is calculated and deducted before your card is charged." },
+  { icon: Smartphone, title: "Leave the app anytime", desc: "The timer runs on our servers. Lock your phone, go back to the app later — it's all still there." },
 ];
 
 const tips = [
@@ -81,34 +82,32 @@ export default async function ForCustomersPage() {
           <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-green-100 dark:bg-green-500/5 rounded-full opacity-60 blur-3xl" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-amber-100 dark:bg-amber-500/5 rounded-full opacity-40 blur-3xl" />
         </div>
-        <div className="relative max-w-4xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 bg-[var(--brand-light)] border border-[var(--brand)]/20 text-[var(--brand)] text-sm font-semibold px-4 py-2 rounded-full mb-6">
-            <Zap className="w-4 h-4 fill-[var(--brand)] text-[var(--brand)]" /> For diners
-          </div>
-          <h1 className="text-5xl md:text-6xl font-extrabold text-[var(--text-primary)] leading-tight mb-6">
+        <Reveal className="relative max-w-4xl mx-auto text-center">
+          <div className="eyebrow justify-center mb-6">For diners</div>
+          <h1 className="headline-xl text-[var(--text-primary)] mb-6">
             Eat at restaurants.<br />
             <span className="gradient-text">Pay less.</span>
           </h1>
-          <p className="text-xl text-[var(--text-secondary)] mb-10 max-w-2xl mx-auto">
+          <p className="body-lead mb-10 max-w-2xl mx-auto">
             No loyalty cards, no points — just a quick sign-in, a QR scan, and an automatic discount when you pay for eating fast.
           </p>
           <div className="flex flex-wrap justify-center gap-3 mb-10">
             {discountTiers.map((t) => (
               <div key={t.discount} className={`border-2 rounded-xl px-5 py-3 text-center ${t.bg}`}>
-                <div className={`text-2xl font-extrabold ${t.color}`}>{t.discount}</div>
+                <div className={`text-2xl font-bold ${t.color}`}>{t.discount}</div>
                 <div className="text-xs text-[var(--text-muted)] mt-0.5 font-medium">{t.time}</div>
               </div>
             ))}
           </div>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <div className="bg-[var(--surface-dark)] text-white font-bold px-8 py-3.5 rounded-2xl flex items-center gap-3 cursor-pointer hover:opacity-90 transition-opacity">
+            <div className="bg-[var(--surface-dark)] text-white font-semibold px-8 py-3.5 rounded-2xl flex items-center gap-3 cursor-pointer hover:opacity-90 transition-opacity duration-300">
               <FaApple className="w-7 h-7 text-white flex-shrink-0" />
               <div className="text-left">
                 <div className="text-white/60 text-xs">Download on the</div>
                 <div className="text-base">App Store</div>
               </div>
             </div>
-            <div className="bg-[var(--surface-dark)] text-white font-bold px-8 py-3.5 rounded-2xl flex items-center gap-3 cursor-pointer hover:opacity-90 transition-opacity">
+            <div className="bg-[var(--surface-dark)] text-white font-semibold px-8 py-3.5 rounded-2xl flex items-center gap-3 cursor-pointer hover:opacity-90 transition-opacity duration-300">
               <FaGooglePlay className="w-6 h-6 text-white flex-shrink-0" />
               <div className="text-left">
                 <div className="text-white/60 text-xs">Get it on</div>
@@ -116,106 +115,104 @@ export default async function ForCustomersPage() {
               </div>
             </div>
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* HOW IT WORKS */}
       <section className="section-padding px-4 bg-[var(--surface)]">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <h2 className="text-4xl font-extrabold text-[var(--text-primary)] mb-4">How it works for you</h2>
+          <Reveal className="text-center mb-16">
+            <h2 className="headline-lg text-[var(--text-primary)] mb-4">How it works for you</h2>
             <p className="text-[var(--text-muted)] text-lg">4 simple steps. One automatic discount.</p>
-          </div>
-          <div className="grid md:grid-cols-4 gap-8">
+          </Reveal>
+          <RevealStagger className="grid md:grid-cols-4 gap-8">
             {steps.map((step) => (
-              <div key={step.num} className="text-center">
-                <div className={`${step.color} w-20 h-20 rounded-2xl flex items-center justify-center shadow-lg mx-auto mb-5 relative`}>
-                  <step.icon className="w-9 h-9 text-white" />
-                  <div className="absolute -top-2 -right-2 w-7 h-7 bg-[var(--surface)] border-2 border-[var(--border)] rounded-full flex items-center justify-center text-xs font-extrabold text-[var(--text-primary)]">
+              <RevealItem key={step.num} className="text-center">
+                <div className="icon-tile icon-tile-lg mx-auto mb-5 relative">
+                  <step.icon className="w-7 h-7" />
+                  <div className="absolute -top-2 -right-2 w-7 h-7 bg-[var(--surface)] border-2 border-[var(--border)] rounded-full flex items-center justify-center text-xs font-bold text-[var(--text-primary)]">
                     {step.num}
                   </div>
                 </div>
-                <h3 className="font-bold text-[var(--text-primary)] mb-2">{step.title}</h3>
+                <h3 className="font-semibold text-[var(--text-primary)] mb-2">{step.title}</h3>
                 <p className="text-sm text-[var(--text-muted)] leading-relaxed">{step.desc}</p>
-              </div>
+              </RevealItem>
             ))}
-          </div>
+          </RevealStagger>
         </div>
       </section>
 
       {/* FEATURES */}
       <section className="section-padding px-4 bg-[var(--surface-alt)]">
         <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-14">
-            <h2 className="text-4xl font-extrabold text-[var(--text-primary)] mb-4">Simple. Private. Secure.</h2>
+          <Reveal className="text-center mb-16">
+            <h2 className="headline-lg text-[var(--text-primary)] mb-4">Simple. Private. Secure.</h2>
             <p className="text-[var(--text-muted)] text-lg">We built DineDash around your privacy and security.</p>
-          </div>
-          <div className="grid md:grid-cols-2 gap-6">
+          </Reveal>
+          <RevealStagger className="grid md:grid-cols-2 gap-6">
             {features.map((f) => (
-              <div key={f.title} className="bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-7 card-hover">
-                <div className={`inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4 ${f.iconBg}`}>
-                  <f.icon className={`w-6 h-6 ${f.iconColor}`} />
+              <RevealItem key={f.title} className="card-premium p-7">
+                <div className="icon-tile mb-4">
+                  <f.icon className="w-5 h-5" />
                 </div>
-                <h3 className="font-bold text-[var(--text-primary)] text-lg mb-2">{f.title}</h3>
+                <h3 className="font-semibold text-[var(--text-primary)] text-lg mb-2">{f.title}</h3>
                 <p className="text-[var(--text-muted)] text-sm leading-relaxed">{f.desc}</p>
-              </div>
+              </RevealItem>
             ))}
-          </div>
+          </RevealStagger>
         </div>
       </section>
 
       {/* TIPS */}
       <section className="section-padding px-4 bg-[var(--surface)]">
         <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 bg-amber-100 dark:bg-amber-500/10 text-amber-700 dark:text-amber-400 text-sm font-semibold px-4 py-2 rounded-full mb-4">
-              💡 Pro tips
-            </div>
-            <h2 className="text-3xl font-extrabold text-[var(--text-primary)]">Tips for the biggest discount</h2>
-          </div>
-          <div className="bg-[var(--surface-alt)] border border-[var(--border)] rounded-2xl p-8">
+          <Reveal className="text-center mb-10">
+            <div className="eyebrow justify-center mb-4">💡 Pro tips</div>
+            <h2 className="headline-md text-[var(--text-primary)]">Tips for the biggest discount</h2>
+          </Reveal>
+          <Reveal delay={0.1} className="bg-[var(--surface-alt)] border border-[var(--border)] rounded-2xl p-8">
             <ul className="space-y-4">
               {tips.map((tip, i) => (
                 <li key={i} className="flex items-start gap-4">
                   <div className="w-6 h-6 bg-[var(--brand-light)] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <Check className="w-3.5 h-3.5 text-[var(--brand)]" />
+                    <Check className="w-3.5 h-3.5 text-[var(--brand-text)]" />
                   </div>
                   <span className="text-[var(--text-secondary)] leading-relaxed">{tip}</span>
                 </li>
               ))}
             </ul>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* DOWNLOAD CTA */}
-      <section className="section-padding px-4 bg-gradient-to-br from-green-600 to-emerald-500 text-white">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-4">Download DineDash today</h2>
-          <p className="text-green-100 text-lg mb-8">Quick sign-in, no loyalty card. Walk into any participating restaurant and start saving.</p>
+      <section className="section-padding px-4 bg-[var(--surface-alt)]">
+        <Reveal className="max-w-3xl mx-auto text-center">
+          <h2 className="headline-lg text-[var(--text-primary)] mb-4">Download Dine<span className="text-[var(--brand)]">Dash</span> today</h2>
+          <p className="text-[var(--text-secondary)] text-lg mb-8">Quick sign-in, no loyalty card. Walk into any participating restaurant and start saving.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <div className="bg-white/15 hover:bg-white/25 border-2 border-white/30 rounded-2xl px-8 py-4 flex items-center gap-4 cursor-pointer transition-colors">
+            <div className="bg-[var(--surface-dark)] hover:opacity-90 rounded-2xl px-8 py-4 flex items-center gap-4 cursor-pointer transition-opacity duration-300">
               <FaApple className="w-8 h-8 text-white flex-shrink-0" />
               <div className="text-left">
-                <div className="text-white/70 text-xs">Download on the</div>
+                <div className="text-white/60 text-xs">Download on the</div>
                 <div className="text-white font-bold text-lg">App Store</div>
               </div>
             </div>
-            <div className="bg-white/15 hover:bg-white/25 border-2 border-white/30 rounded-2xl px-8 py-4 flex items-center gap-4 cursor-pointer transition-colors">
+            <div className="bg-[var(--surface-dark)] hover:opacity-90 rounded-2xl px-8 py-4 flex items-center gap-4 cursor-pointer transition-opacity duration-300">
               <FaGooglePlay className="w-7 h-7 text-white flex-shrink-0" />
               <div className="text-left">
-                <div className="text-white/70 text-xs">Get it on</div>
+                <div className="text-white/60 text-xs">Get it on</div>
                 <div className="text-white font-bold text-lg">Google Play</div>
               </div>
             </div>
           </div>
-          <p className="mt-6 text-green-100 text-sm">
+          <p className="mt-6 text-[var(--text-muted)] text-sm">
             Are you a restaurant owner?{" "}
-            <Link href="/get-started" className="text-white font-semibold underline underline-offset-2">
+            <Link href="/get-started" className="text-[var(--brand-text)] font-semibold underline underline-offset-2">
               Start your free trial →
             </Link>
           </p>
-        </div>
+        </Reveal>
       </section>
     </div>
   );

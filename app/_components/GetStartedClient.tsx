@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Zap, ChefHat, QrCode, BarChart3 } from "lucide-react";
 import { FaApple, FaGooglePlay } from "react-icons/fa";
 import QRCode from "qrcode";
+import { Reveal } from "@/components/Reveal";
 
 // TODO: replace with the live App Store URL once the app is published
 const APP_STORE_URL = "https://apps.apple.com/app/dinedash";
@@ -32,17 +33,17 @@ export default async function GetStartedClient() {
         <div className="relative max-w-6xl mx-auto">
           <div className="grid lg:grid-cols-5 gap-12 items-start">
             {/* Left: info */}
-            <div className="lg:col-span-2">
+            <Reveal className="lg:col-span-2">
               <Link href="/" className="flex items-center gap-2.5 mb-8">
-                <div className="w-9 h-9 bg-[var(--brand)] rounded-xl flex items-center justify-center">
-                  <Zap className="w-5 h-5 text-[#0F1623] fill-[#0F1623]" />
+                <div className="w-8 h-8 bg-[var(--brand)] rounded-lg flex items-center justify-center">
+                  <Zap className="w-4 h-4 text-[#0F1623] fill-[#0F1623]" />
                 </div>
-                <span className="text-xl font-bold text-[var(--text-primary)]">
+                <span className="text-[15px] font-semibold tracking-tight text-[var(--text-primary)]">
                   Dine<span className="text-[var(--brand)]">Dash</span>
                 </span>
               </Link>
 
-              <h1 className="text-4xl font-extrabold text-[var(--text-primary)] mb-4 leading-tight">
+              <h1 className="headline-lg text-[var(--text-primary)] mb-4">
                 Start your<br />
                 <span className="gradient-text">free 30-day trial</span>
               </h1>
@@ -53,19 +54,19 @@ export default async function GetStartedClient() {
               <div className="space-y-4">
                 {perks.map((perk) => (
                   <div key={perk.text} className="flex items-center gap-3">
-                    <div className="w-9 h-9 bg-[var(--brand-light)] rounded-xl flex items-center justify-center flex-shrink-0">
-                      <perk.icon className="w-4 h-4 text-[var(--brand)]" />
+                    <div className="icon-tile w-9 h-9 rounded-xl">
+                      <perk.icon className="w-4 h-4" />
                     </div>
                     <span className="text-[var(--text-secondary)] text-sm font-medium">{perk.text}</span>
                   </div>
                 ))}
               </div>
-            </div>
+            </Reveal>
 
             {/* Right: app download */}
-            <div className="lg:col-span-3">
+            <Reveal delay={0.1} className="lg:col-span-3">
               <div className="bg-[var(--surface)] border border-[var(--border)] rounded-3xl p-8 md:p-10 shadow-sm">
-                <h2 className="text-xl font-bold text-[var(--text-primary)] mb-2">Get the DineDash app</h2>
+                <h2 className="text-xl font-semibold text-[var(--text-primary)] mb-2">Get the DineDash app</h2>
                 <p className="text-[var(--text-secondary)] text-sm mb-8 leading-relaxed">
                   Available on iPhone and Android. Download the app and approve the 30-day free trial subscription to get your restaurant live.
                 </p>
@@ -75,7 +76,7 @@ export default async function GetStartedClient() {
                     href={APP_STORE_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 bg-[var(--surface-dark)] text-white font-bold px-6 py-3.5 rounded-2xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity"
+                    className="flex-1 bg-[var(--surface-dark)] text-white font-semibold px-6 py-3.5 rounded-2xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity duration-300"
                   >
                     <FaApple className="w-7 h-7 text-white flex-shrink-0" />
                     <div className="text-left">
@@ -87,7 +88,7 @@ export default async function GetStartedClient() {
                     href={PLAY_STORE_URL}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex-1 bg-[var(--surface-dark)] text-white font-bold px-6 py-3.5 rounded-2xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity"
+                    className="flex-1 bg-[var(--surface-dark)] text-white font-semibold px-6 py-3.5 rounded-2xl flex items-center justify-center gap-3 hover:opacity-90 transition-opacity duration-300"
                   >
                     <FaGooglePlay className="w-6 h-6 text-white flex-shrink-0" />
                     <div className="text-left">
@@ -132,7 +133,7 @@ export default async function GetStartedClient() {
                   </div>
                 </div>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>

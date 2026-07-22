@@ -28,11 +28,11 @@ export default function ThemeToggle() {
       onClick={cycle}
       title={label}
       aria-label={label}
-      className="w-9 h-9 rounded-xl flex items-center justify-center transition-colors
-        bg-stone-100 hover:bg-green-100 text-stone-600 hover:text-green-700
-        dark:bg-slate-800 dark:hover:bg-green-900/40 dark:text-slate-300 dark:hover:text-green-400"
+      className="w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-300
+        bg-[var(--surface-alt)] border border-[var(--border)] text-[var(--text-secondary)]
+        hover:text-[var(--brand-text)] hover:border-[var(--brand)]/40"
     >
-      <Icon className="w-4 h-4" />
+      <Icon className="w-3.5 h-3.5" />
     </button>
   );
 }

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ShieldCheck, Lock, Globe, Mail } from "lucide-react";
+import { Reveal, RevealStagger, RevealItem } from "@/components/Reveal";
 
 export type LegalSection = {
   heading: string;
@@ -39,11 +40,11 @@ export default function LegalPage({
         {/* glow */}
         <div className="absolute -top-32 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[var(--brand)] opacity-[0.07] blur-[120px] rounded-full pointer-events-none" />
 
-        <div className="relative max-w-5xl mx-auto">
+        <Reveal className="relative max-w-5xl mx-auto">
           <div className="inline-flex items-center gap-2 border border-[var(--border)] text-[var(--text-muted)] text-xs px-3 py-1.5 rounded-full mb-8 bg-[var(--surface)]">
             Last updated {updated}
           </div>
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.0] mb-8 text-[var(--text-primary)]">
+          <h1 className="headline-xl mb-8 text-[var(--text-primary)]">
             {title}
           </h1>
           <p className="text-[var(--text-secondary)] text-lg leading-relaxed max-w-2xl mb-10">
@@ -62,7 +63,7 @@ export default function LegalPage({
               </div>
             ))}
           </div>
-        </div>
+        </Reveal>
       </section>
 
       {/* ── Body ── */}
@@ -97,12 +98,13 @@ export default function LegalPage({
         </aside>
 
         {/* Sections */}
-        <article className="space-y-4">
+        <div className="space-y-4">
+        <RevealStagger className="space-y-4" stagger={0.05}>
           {sections.map((section, i) => (
-            <div
+            <RevealItem
               key={i}
               id={`section-${i}`}
-              className="group relative bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-8 overflow-hidden scroll-mt-32 hover:border-[var(--brand)]/40 transition-colors duration-300"
+              className="group relative bg-[var(--surface)] border border-[var(--border)] rounded-2xl p-8 overflow-hidden scroll-mt-32 hover:border-[var(--brand)]/40 transition-colors duration-500"
             >
               {/* Ghost number */}
               <span
@@ -128,24 +130,25 @@ export default function LegalPage({
                   </p>
                 ))}
               </div>
-            </div>
+            </RevealItem>
           ))}
+        </RevealStagger>
 
-          {/* Footer */}
-          <div className="mt-6 p-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div>
-              <p className="text-sm font-semibold text-[var(--text-primary)] mb-0.5">Still have questions?</p>
-              <p className="text-sm text-[var(--text-muted)]">We're happy to help clarify anything in plain language.</p>
-            </div>
-            <Link
-              href="/contact"
-              className="btn-primary px-5 py-2.5 text-sm font-semibold whitespace-nowrap inline-flex items-center gap-2 flex-shrink-0"
-            >
-              <Mail className="w-4 h-4" />
-              Get in touch
-            </Link>
+        {/* Footer */}
+        <Reveal className="p-6 rounded-2xl border border-[var(--border)] bg-[var(--surface)] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <p className="text-sm font-semibold text-[var(--text-primary)] mb-0.5">Still have questions?</p>
+            <p className="text-sm text-[var(--text-muted)]">We're happy to help clarify anything in plain language.</p>
           </div>
-        </article>
+          <Link
+            href="/contact"
+            className="btn-primary px-5 py-2.5 text-sm font-semibold whitespace-nowrap inline-flex items-center gap-2 flex-shrink-0"
+          >
+            <Mail className="w-4 h-4" />
+            Get in touch
+          </Link>
+        </Reveal>
+        </div>
       </div>
     </div>
   );

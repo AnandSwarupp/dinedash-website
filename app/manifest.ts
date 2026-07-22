@@ -8,7 +8,7 @@ export default function manifest(): MetadataRoute.Manifest {
       "DineDash rewards diners for eating quickly with automatic refunds up to 30%. Restaurants get faster table turnover with zero extra staff.",
     start_url: "/",
     display: "standalone",
-    background_color: "#FFFBF5",
+    background_color: "#F6F7F9",
     theme_color: "#16A34A",
     icons: [
       {

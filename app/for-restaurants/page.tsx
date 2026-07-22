@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Check, QrCode, BarChart3, Smartphone, Users, TrendingUp, ChefHat, Zap, Shield, Settings } from "lucide-react";
 import { getContent } from "@/lib/getContent";
+import { Reveal, RevealStagger, RevealItem } from "@/components/Reveal";
 
 export const metadata: Metadata = {
   title: "For Restaurants",
@@ -49,44 +50,42 @@ export default async function ForRestaurantsPage() {
   return (
     <div className="overflow-x-hidden">
       {/* HERO */}
-      <section className="relative pt-32 pb-20 px-4 bg-[var(--surface-dark)] text-white overflow-hidden">
+      <section className="relative pt-32 pb-20 px-4 overflow-hidden">
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <div className="absolute -top-40 right-0 w-[500px] h-[500px] bg-green-600/10 rounded-full blur-3xl" />
         </div>
         <div className="relative max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-14 items-center">
-            <div>
-              <div className="inline-flex items-center gap-2 bg-[var(--brand)]/20 text-[var(--brand)] text-sm font-semibold px-4 py-2 rounded-full mb-6">
-                <ChefHat className="w-4 h-4" /> For restaurant owners
-              </div>
-              <h1 className="text-5xl md:text-6xl font-extrabold mb-6 leading-tight">
+            <Reveal>
+              <div className="eyebrow mb-6">For restaurant owners</div>
+              <h1 className="headline-xl text-[var(--text-primary)] mb-6">
                 More covers.<br />
                 <span className="text-[var(--brand)]">Zero friction.</span>
               </h1>
-              <p className="text-xl text-white/60 mb-8 leading-relaxed">
+              <p className="body-lead mb-8">
                 DineDash turns every table into a higher-turnover asset. Customers are incentivised to dine efficiently. You get more covers. Everyone wins.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link href="/get-started" className="bg-[var(--brand)] text-[#0F1623] font-bold px-7 py-3.5 rounded-full hover:opacity-90 transition-opacity inline-flex items-center gap-2">
+                <Link href="/get-started" className="btn-primary">
                   Start Free Trial <ArrowRight className="w-5 h-5" />
                 </Link>
-                <Link href="/pricing" className="border-2 border-white/20 text-white/80 font-semibold px-7 py-3.5 rounded-full hover:border-[var(--brand)] hover:text-[var(--brand)] transition-colors">
+                <Link href="/pricing" className="btn-outline">
                   View Plans
                 </Link>
               </div>
-              <div className="mt-8 flex flex-wrap gap-5 text-sm text-white/50">
+              <div className="mt-8 flex flex-wrap gap-5 text-sm text-[var(--text-secondary)]">
                 <span className="flex items-center gap-2"><Check className="w-4 h-4 text-[var(--brand)]" /> Live in under 1 hour</span>
                 <span className="flex items-center gap-2"><Check className="w-4 h-4 text-[var(--brand)]" /> No hardware required</span>
                 <span className="flex items-center gap-2"><Check className="w-4 h-4 text-[var(--brand)]" /> Cancel anytime</span>
               </div>
-            </div>
+            </Reveal>
 
-            {/* Dashboard mockup */}
-            <div className="flex justify-center">
-              <div className="w-full max-w-md bg-white/5 border border-white/10 rounded-3xl p-6">
+            {/* Dashboard mockup — deliberately dark, mimics a real app/dashboard screenshot */}
+            <Reveal delay={0.15} y={32} className="flex justify-center">
+              <div className="w-full max-w-md bg-[var(--surface-dark)] border border-white/10 rounded-3xl p-6 shadow-2xl">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <div className="text-white font-bold text-lg">Live Sessions</div>
+                    <div className="text-white font-semibold text-lg">Live Sessions</div>
                     <div className="text-white/50 text-sm">Tonight — 6 tables active</div>
                   </div>
                   <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" />
@@ -103,7 +102,7 @@ export default async function ForRestaurantsPage() {
                         <div className="text-white font-semibold text-sm">{row.table}</div>
                         <div className="text-white/40 text-xs font-mono">{row.timer}</div>
                       </div>
-                      <div className={`text-2xl font-extrabold ${row.color}`}>{row.tier}</div>
+                      <div className={`text-2xl font-bold ${row.color}`}>{row.tier}</div>
                     </div>
                   ))}
                 </div>
@@ -116,7 +115,7 @@ export default async function ForRestaurantsPage() {
                   ))}
                 </div>
               </div>
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -124,96 +123,98 @@ export default async function ForRestaurantsPage() {
       {/* BENEFITS */}
       <section className="section-padding px-4 bg-[var(--surface)]">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-[var(--text-primary)] mb-4">
+          <Reveal className="text-center mb-16">
+            <h2 className="headline-lg text-[var(--text-primary)] mb-4">
               Built for restaurant <span className="gradient-text">growth</span>
             </h2>
-            <p className="text-xl text-[var(--text-muted)] max-w-2xl mx-auto">
+            <p className="body-lead max-w-2xl mx-auto">
               Every feature is designed to help you serve more customers and protect your revenue.
             </p>
-          </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          </Reveal>
+          <RevealStagger className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {benefits.map((b) => (
-              <div key={b.title} className="bg-[var(--surface-alt)] border border-[var(--border)] rounded-2xl p-7 card-hover">
+              <RevealItem key={b.title} className="card-premium p-7">
                 <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-[var(--brand-light)] rounded-xl flex items-center justify-center">
-                    <b.icon className="w-6 h-6 text-[var(--brand)]" />
+                  <div className="icon-tile">
+                    <b.icon className="w-5 h-5" />
                   </div>
                   <div className="text-right">
-                    <div className="text-2xl font-extrabold text-[var(--text-primary)]">{b.stat}</div>
+                    <div className="text-2xl font-bold text-[var(--text-primary)]">{b.stat}</div>
                     <div className="text-xs text-[var(--text-muted)]">{b.statLabel}</div>
                   </div>
                 </div>
-                <h3 className="font-bold text-[var(--text-primary)] text-lg mb-2">{b.title}</h3>
+                <h3 className="font-semibold text-[var(--text-primary)] text-lg mb-2">{b.title}</h3>
                 <p className="text-[var(--text-muted)] text-sm leading-relaxed">{b.desc}</p>
-              </div>
+              </RevealItem>
             ))}
-          </div>
+          </RevealStagger>
         </div>
       </section>
 
       {/* SETUP STEPS */}
       <section className="section-padding px-4 bg-[var(--surface-alt)]">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-14">
-            <h2 className="text-4xl font-extrabold text-[var(--text-primary)] mb-4">
+          <Reveal className="text-center mb-16">
+            <h2 className="headline-lg text-[var(--text-primary)] mb-4">
               Live in <span className="gradient-text">under 1 hour</span>
             </h2>
             <p className="text-[var(--text-muted)] text-lg">No engineers, no hardware. Just four simple steps.</p>
-          </div>
-          <div className="grid md:grid-cols-4 gap-8">
+          </Reveal>
+          <RevealStagger className="grid md:grid-cols-4 gap-8">
             {setupSteps.map((step) => (
-              <div key={step.num} className="text-center">
+              <RevealItem key={step.num} className="text-center">
                 <div className="relative inline-block mb-5">
-                  <div className="w-20 h-20 bg-[var(--brand)] rounded-2xl flex items-center justify-center shadow-lg mx-auto">
-                    <step.icon className="w-9 h-9 text-[#0F1623]" />
+                  <div className="icon-tile icon-tile-lg mx-auto">
+                    <step.icon className="w-7 h-7" />
                   </div>
-                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-[var(--surface)] border-2 border-[var(--border)] rounded-full flex items-center justify-center text-sm font-extrabold text-[var(--text-primary)]">
+                  <div className="absolute -top-2 -right-2 w-8 h-8 bg-[var(--surface)] border-2 border-[var(--border)] rounded-full flex items-center justify-center text-sm font-bold text-[var(--text-primary)]">
                     {step.num}
                   </div>
                 </div>
-                <h3 className="font-bold text-[var(--text-primary)] text-lg mb-2">{step.title}</h3>
+                <h3 className="font-semibold text-[var(--text-primary)] text-lg mb-2">{step.title}</h3>
                 <p className="text-[var(--text-muted)] text-sm leading-relaxed">{step.desc}</p>
-              </div>
+              </RevealItem>
             ))}
-          </div>
-          <div className="mt-12 text-center">
+          </RevealStagger>
+          <Reveal className="mt-14 text-center">
             <Link href="/get-started" className="btn-primary text-base px-8 py-3.5">
               Get Started Now <ArrowRight className="w-5 h-5" />
             </Link>
-          </div>
+          </Reveal>
         </div>
       </section>
 
       {/* FAQ */}
       <section className="section-padding px-4 bg-[var(--surface)]">
         <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-extrabold text-[var(--text-primary)] text-center mb-10">Restaurant owner FAQs</h2>
-          <div className="space-y-4">
+          <Reveal>
+            <h2 className="headline-lg text-[var(--text-primary)] text-center mb-14">Restaurant owner FAQs</h2>
+          </Reveal>
+          <RevealStagger className="space-y-4" stagger={0.06}>
             {faqs.map((faq) => (
-              <div key={faq.q} className="bg-[var(--surface-alt)] border border-[var(--border)] rounded-2xl p-6">
-                <h3 className="font-bold text-[var(--text-primary)] mb-2">{faq.q}</h3>
+              <RevealItem key={faq.q} className="bg-[var(--surface-alt)] border border-[var(--border)] rounded-2xl p-6">
+                <h3 className="font-semibold text-[var(--text-primary)] mb-2">{faq.q}</h3>
                 <p className="text-[var(--text-muted)] text-sm leading-relaxed">{faq.a}</p>
-              </div>
+              </RevealItem>
             ))}
-          </div>
+          </RevealStagger>
         </div>
       </section>
 
       {/* BOTTOM CTA */}
-      <section className="section-padding px-4 bg-[var(--surface-dark)] text-white">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-extrabold mb-4">Start your free trial today</h2>
-          <p className="text-white/50 text-lg mb-8">Approve your free trial via the App Store or Google Play. Cancel any time.</p>
+      <section className="section-padding px-4 bg-[var(--surface)]">
+        <Reveal className="max-w-3xl mx-auto text-center">
+          <h2 className="headline-lg text-[var(--text-primary)] mb-4">Start your free trial today</h2>
+          <p className="text-[var(--text-secondary)] text-lg mb-8">Approve your free trial via the App Store or Google Play. Cancel any time.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/get-started" className="bg-[var(--brand)] text-[#0F1623] font-bold px-8 py-3.5 rounded-full hover:opacity-90 transition-opacity inline-flex items-center gap-2">
+            <Link href="/get-started" className="btn-primary">
               Get Started Free <ArrowRight className="w-5 h-5" />
             </Link>
-            <Link href="/contact" className="border-2 border-white/20 text-white/70 font-semibold px-8 py-3.5 rounded-full hover:border-[var(--brand)] hover:text-[var(--brand)] transition-colors">
+            <Link href="/contact" className="btn-outline">
               Talk to Us First
             </Link>
           </div>
-        </div>
+        </Reveal>
       </section>
     </div>
   );
