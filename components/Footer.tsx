@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Zap, Mail, MapPin, Phone } from "lucide-react";
 
@@ -48,24 +49,11 @@ const footerLinks = {
   ],
 };
 
-const fallbackTiers = [
-  { time: "< 15 min", discount: "30%", color: "text-green-400 bg-green-500/10 border-green-500/30" },
-  { time: "< 30 min", discount: "20%", color: "text-amber-400 bg-amber-500/10 border-amber-500/30" },
-  { time: "< 45 min", discount: "10%", color: "text-amber-300 bg-amber-500/10 border-amber-500/20" },
-  { time: "> 45 min", discount: "0%",  color: "text-slate-500 bg-slate-700/20 border-slate-600/30" },
-];
-
-const tierColors = [
-  "text-green-400 bg-green-500/10 border-green-500/30",
-  "text-amber-400 bg-amber-500/10 border-amber-500/30",
-  "text-amber-300 bg-amber-500/10 border-amber-500/20",
-  "text-slate-500 bg-slate-700/20 border-slate-600/30",
-];
-
 interface Settings { siteName?: string; tagline?: string; email?: string; phone?: string; address?: string; ctaPrimary?: string; ctaSecondary?: string; twitterUrl?: string; linkedinUrl?: string; instagramUrl?: string; }
 
 export default function Footer() {
-  const [tiers, setTiers] = useState(fallbackTiers);
+  const pathname = usePathname();
+  const isGetStartedPage = pathname === "/get-started";
   const [settings, setSettings] = useState<Settings>({
     siteName: "DineDash",
     tagline: "Pay first. Eat fast. Get money back. The dining experience that rewards speed and helps restaurants serve more covers every day.",
@@ -77,17 +65,6 @@ export default function Footer() {
   });
 
   useEffect(() => {
-    fetch("/api/content/tiers")
-      .then((r) => r.json())
-      .then((data) => {
-        if (Array.isArray(data?.data) && data.data.length > 0) {
-          setTiers(data.data.map((t: { time: string; discount: string }, i: number) => ({
-            time: t.time, discount: t.discount,
-            color: tierColors[i] ?? tierColors[tierColors.length - 1],
-          })));
-        }
-      }).catch(() => {});
-
     fetch("/api/content/settings")
       .then((r) => r.json())
       .then((data) => { if (data?.data) setSettings(data.data); })
@@ -97,37 +74,24 @@ export default function Footer() {
   return (
     <footer className="bg-[var(--surface-dark)] text-white">
       {/* Top CTA strip */}
-      <div className="bg-[var(--brand)] py-10 px-4">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div>
-            <h3 className="text-2xl font-bold text-[#0F1623]">Ready to fill your tables faster?</h3>
-            <p className="text-[#0F1623]/70 mt-1">Join hundreds of restaurants already using Dine Dash.</p>
-          </div>
-          <div className="flex gap-3">
-            <Link href="/get-started" className="bg-[#0F1623] text-[var(--brand)] font-bold px-6 py-3 rounded-full hover:opacity-90 transition-opacity">
-              {settings.ctaPrimary || "Get Started Free"}
-            </Link>
-            <Link href="/contact" className="border-2 border-[#0F1623]/40 text-[#0F1623] font-semibold px-6 py-3 rounded-full hover:bg-[#0F1623]/10 transition-colors">
-              {settings.ctaSecondary || "Talk to Us"}
-            </Link>
-          </div>
-        </div>
-      </div>
-
-      {/* Discount tiers quick reference */}
-      <div className="border-b border-[var(--border)] py-8 px-4">
-        <div className="max-w-7xl mx-auto">
-          <p className="text-[var(--text-muted)] text-sm mb-4 text-center">Speed discount tiers</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            {tiers.map((tier) => (
-              <div key={tier.time} className={`rounded-xl border px-4 py-3 text-center ${tier.color}`}>
-                <div className="text-2xl font-bold">{tier.discount}</div>
-                <div className="text-xs mt-1 font-medium opacity-80">{tier.time}</div>
-              </div>
-            ))}
+      {!isGetStartedPage && (
+        <div className="bg-[var(--brand)] py-10 px-4">
+          <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+            <div>
+              <h3 className="text-2xl font-bold text-[#0F1623]">Ready to fill your tables faster?</h3>
+              <p className="text-[#0F1623]/70 mt-1">Join hundreds of restaurants already using Dine Dash.</p>
+            </div>
+            <div className="flex gap-3">
+              <Link href="/get-started" className="bg-[#0F1623] text-[var(--brand)] font-bold px-6 py-3 rounded-full hover:opacity-90 transition-opacity">
+                {settings.ctaPrimary || "Get Started Free"}
+              </Link>
+              <Link href="/how-it-works" className="border-2 border-[#0F1623]/40 text-[#0F1623] font-semibold px-6 py-3 rounded-full hover:bg-[#0F1623]/10 transition-colors">
+                {settings.ctaSecondary || "See how it works"}
+              </Link>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Main footer */}
       <div className="max-w-7xl mx-auto px-4 py-14">

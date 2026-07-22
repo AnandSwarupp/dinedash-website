@@ -132,7 +132,7 @@ export default function ContactClient() {
                 <h3 className="font-bold text-[var(--text-primary)] mb-4">Quick links</h3>
                 <div className="space-y-3">
                   {[
-                    { label: "Ready to get started?", href: "/get-started", desc: "Start your 14-day free trial" },
+                    { label: "Ready to get started?", href: "/get-started", desc: "Start your 30-day free trial" },
                     { label: "See our pricing", href: "/pricing", desc: "Transparent plans from £49/mo" },
                     { label: "How it works", href: "/how-it-works", desc: "Full guide for restaurants & diners" },
                   ].map((link) => (

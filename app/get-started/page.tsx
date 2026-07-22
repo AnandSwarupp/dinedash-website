@@ -4,11 +4,11 @@ import GetStartedClient from "../_components/GetStartedClient";
 export const metadata: Metadata = {
   title: "Get Started",
   description:
-    "Start your free 14-day DineDash trial. No credit card required. Go live in under 1 hour and start turning tables faster today.",
+    "Start your free 30-day DineDash trial via the App Store or Google Play. Go live in under 1 hour and start turning tables faster today.",
   alternates: { canonical: "/get-started" },
   openGraph: {
     title: "Get Started | DineDash",
-    description: "Start your free 14-day trial. No credit card required. Go live in under 1 hour.",
+    description: "Start your free 30-day trial via the App Store or Google Play. Go live in under 1 hour.",
     url: "https://dinedash.app/get-started",
   },
 };

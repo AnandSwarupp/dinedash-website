@@ -120,7 +120,7 @@ const content: Record<string, unknown> = {
     {
       id: "faq_5",
       question: "Is there a free trial?",
-      answer: "Yes — the Growth plan comes with a 14-day free trial, no credit card required. The Starter plan is free for the first month.",
+      answer: "Yes — the Growth plan comes with a 30-day free trial, approved via the App Store or Google Play. The Starter plan is free for the first month.",
     },
     {
       id: "faq_6",

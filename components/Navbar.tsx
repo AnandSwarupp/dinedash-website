@@ -97,19 +97,21 @@ export default function Navbar() {
 
                 {/* Dropdown */}
                 {item.children && activeDropdown === item.label && (
-                  <div className="absolute top-full left-0 mt-2 w-72 bg-[var(--surface)] rounded-2xl shadow-xl border border-[var(--border)] p-2 z-50">
-                    {item.children.map((child) => (
-                      <Link
-                        key={child.href}
-                        href={child.href}
-                        className="flex flex-col px-4 py-3 rounded-xl hover:bg-[var(--brand-light)] transition-colors group"
-                      >
-                        <span className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--brand)] transition-colors">
-                          {child.label}
-                        </span>
-                        <span className="text-xs text-[var(--text-muted)] mt-0.5">{child.desc}</span>
-                      </Link>
-                    ))}
+                  <div className="absolute top-full left-0 pt-2 w-72 z-50">
+                    <div className="bg-[var(--surface)] rounded-2xl shadow-xl border border-[var(--border)] p-2">
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.href}
+                          href={child.href}
+                          className="flex flex-col px-4 py-3 rounded-xl hover:bg-[var(--brand-light)] transition-colors group"
+                        >
+                          <span className="text-sm font-semibold text-[var(--text-primary)] group-hover:text-[var(--brand)] transition-colors">
+                            {child.label}
+                          </span>
+                          <span className="text-xs text-[var(--text-muted)] mt-0.5">{child.desc}</span>
+                        </Link>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>

@@ -8,11 +8,11 @@ export const revalidate = 0;
 export const metadata: Metadata = {
   title: "Pricing",
   description:
-    "Simple monthly plans for restaurants. Starter at £49/month, Growth at £99/month, Enterprise at £249/month. 14-day free trial, no credit card needed.",
+    "Simple monthly plans for restaurants. Starter at £49/month, Growth at £99/month, Enterprise at £249/month. 30-day free trial via the App Store or Google Play.",
   alternates: { canonical: "/pricing" },
   openGraph: {
     title: "Pricing | DineDash",
-    description: "Simple monthly plans from £49/month. 14-day free trial, no credit card needed.",
+    description: "Simple monthly plans from £49/month. 30-day free trial via the App Store or Google Play.",
     url: "https://dinedash.app/pricing",
   },
 };
@@ -106,7 +106,7 @@ const fallbackPlans = [
 ];
 
 const fallbackFaqs = [
-  { q: "Is there a free trial?", a: "Yes — all plans include a 14-day free trial. No credit card required to start." },
+  { q: "Is there a free trial?", a: "Yes — all plans include a 30-day free trial. Approve the subscription in the App Store or Google Play to start." },
   { q: "Are there transaction fees?", a: "DineDash charges no per-transaction fees. You pay a flat monthly subscription. Stripe's standard processing fees apply to the customer's payment." },
   { q: "Who funds the customer's discount?", a: "The discount simply reduces the total the customer pays at checkout — you receive the discounted amount directly. There's no separate refund to fund; the subscription fee is what covers DineDash." },
   { q: "Can I switch plans?", a: "Yes. You can upgrade or downgrade at any time. Changes take effect at the start of your next billing cycle." },
@@ -154,7 +154,7 @@ export default async function PricingPage() {
           <p className="text-xl text-[var(--text-secondary)] mb-4">
             No hidden fees. No per-transaction charges. Cancel any time.
           </p>
-          <p className="text-[var(--text-muted)] text-sm">All plans include a 14-day free trial • Annual billing saves 2 months</p>
+          <p className="text-[var(--text-muted)] text-sm">All plans include a 30-day free trial • Annual billing saves 2 months</p>
         </div>
       </section>
 
@@ -250,7 +250,7 @@ export default async function PricingPage() {
               <div className="text-4xl mb-4">🏪</div>
               <h3 className="text-xl font-bold text-white mb-4">For restaurants — subscription</h3>
               <ul className="space-y-3">
-                {["Monthly subscription (£49–£249/mo)","No per-transaction fees","14-day free trial — no card needed","Cancel any time","Full dashboard + QR code generation"].map((item) => (
+                {["Monthly subscription (£49–£249/mo)","No per-transaction fees","30-day free trial via App Store or Google Play","Cancel any time","Full dashboard + QR code generation"].map((item) => (
                   <li key={item} className="flex items-center gap-3 text-sm text-white/70">
                     <Check className="w-4 h-4 text-[var(--brand)] flex-shrink-0" /> {item}
                   </li>
@@ -279,8 +279,8 @@ export default async function PricingPage() {
       {/* CTA */}
       <section className="section-padding px-4 bg-green-600 text-white">
         <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl font-extrabold mb-4">Try DineDash free for 14 days</h2>
-          <p className="text-green-100 text-lg mb-8">No credit card required. Cancel any time. Be live in under 1 hour.</p>
+          <h2 className="text-3xl font-extrabold mb-4">Try DineDash free for 30 days</h2>
+          <p className="text-green-100 text-lg mb-8">Approve your free trial via the App Store or Google Play. Cancel any time. Be live in under 1 hour.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/get-started" className="bg-white text-green-700 font-bold px-8 py-3.5 rounded-full hover:bg-green-50 transition-colors inline-flex items-center gap-2">
               Start Free Trial <ArrowRight className="w-5 h-5" />

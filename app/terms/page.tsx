@@ -27,7 +27,7 @@ const FALLBACK = {
       heading: "2. Payments and discounts",
       body: [
         "All payments are processed securely via Stripe. Discount percentages are calculated automatically based on the dining session timer and applied to the bill before your card is charged.",
-        "Restaurant subscriptions include a 14-day free trial. You may cancel at any time before the trial ends without being charged.",
+        "Restaurant subscriptions include a 30-day free trial. You may cancel at any time before the trial ends without being charged.",
       ],
     },
     {

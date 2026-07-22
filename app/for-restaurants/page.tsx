@@ -204,7 +204,7 @@ export default async function ForRestaurantsPage() {
       <section className="section-padding px-4 bg-[var(--surface-dark)] text-white">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4">Start your free trial today</h2>
-          <p className="text-white/50 text-lg mb-8">No credit card required to sign up. Cancel any time.</p>
+          <p className="text-white/50 text-lg mb-8">Approve your free trial via the App Store or Google Play. Cancel any time.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/get-started" className="bg-[var(--brand)] text-[#0F1623] font-bold px-8 py-3.5 rounded-full hover:opacity-90 transition-opacity inline-flex items-center gap-2">
               Get Started Free <ArrowRight className="w-5 h-5" />
